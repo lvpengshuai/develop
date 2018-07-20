@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trs.mapper.SpliceMapper">
+    <!-- 返回值设定 -->
+    <resultMap id="coResultMap" type="com.trs.model.Splice" >
+        <id column="id" property="id"  />
+        <result column="zid" property="zid" />
+        <result column="title" property="title" />
+        <result column="username" property="username"  />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="bookcode" property="bookcode"/>
+    </resultMap>
+
+
+    <!-- 用户，tid判断是否已经拼接 -->
+    <select id="selectSpliceByUserNameAndTID"  resultMap="coResultMap">
+        SELECT * FROM  my_splice WHERE  username=#{userName} AND zid=#{zid} AND bookcode=#{bookcode}
+    </select>
+
+    <!--更新拼接-->
+    <update id="upSplice" parameterType="com.trs.model.Splice">
+        UPDATE my_splice SET zid=#{zid}, title=#{title}, gmt_create=#{gmtCreate},bookcode=#{bookcode} where username=#{username} AND zid=#{zid}
+    </update>
+
+    <!--添加拼接-->
+    <insert id="mySpliceAdd" parameterType="com.trs.model.Splice">
+        insert into my_splice (username,gmt_create,zid,title,bookcode)
+        values (#{username},#{gmtCreate},#{zid},#{title},#{bookcode})
+    </insert>
+
+    <!-- 查找拼接该用户 -->
+    <select id="spliceShow"  resultMap="coResultMap" parameterType="map">
+        SELECT * FROM  my_splice WHERE username=#{username}
+                ORDER BY id
+        limit #{pageSize},#{currPage}
+    </select>
+
+    <!-- 删除文件夹 -->
+    <delete id="deleteSplice" parameterType="java.lang.Integer">
+        delete from my_splice
+        where id = #{id}
+    </delete>
+
+    <!-- 我得拼接总个数 -->
+    <select id="allSpliceShowCount" resultType="Integer">
+        SELECT count(*)
+        from my_splice
+        <where>
+            username = #{username}
+        </where>
+    </select>
+</mapper>

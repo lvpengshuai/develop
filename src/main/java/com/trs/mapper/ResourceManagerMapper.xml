@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- @author LiangYong -->
+<!-- @create - -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trs.mapper.ResourceManagerMapper">
+    <select id="selectAllBook" resultType="com.trs.model.Book" parameterType="Map">
+        SELECT
+        b.id,
+        b.title,
+        b.title_en,
+        b.abs,
+        b.pubdate,
+        b.author,
+        b.publishername,
+        b.isbn,
+        b.classification,
+        b.charcount,
+        b.bookcode
+        FROM
+        book b
+        WHERE
+        1 = 1
+        <if test="search != null">
+            AND b.title LIKE #{search}
+        </if>
+        ORDER BY
+        b.bookyear DESC
+    </select>
+    <select id="selectBookById" resultType="com.trs.model.Book">
+		SELECT
+			b.id,
+			b.title,
+			b.title_en,
+			b.abs,
+			b.pubdate,
+			b.author,
+			b.publishername,
+			b.isbn,
+			b.classification,
+			b.charcount,
+            b.bookcode
+		FROM
+			book b
+		WHERE
+			1 = 1
+			AND b.id=#{id}
+	</select>
+    <update id="updateBook">
+		UPDATE book b
+		SET b.abs = #{abs},
+			b.author = #{author},
+			b.charcount = #{charCount},
+			b.isbn = #{isbn},
+			b.pubdate = #{pubdate},
+			b.publishername = #{publisherName},
+			b.title=#{title},
+			b.title_en=#{title_en}
+		WHERE
+			b.id = #{id}
+	</update>
+
+    <delete id="deleteBook">
+        DELETE
+        FROM
+        book
+        WHERE
+        bookcode IN
+        <foreach collection="bookCodes" index="index" item="bookCode" open="(" separator="," close=")">
+            #{bookCode}
+        </foreach>
+    </delete>
+    <delete id="deleteBookDetails">
+        DELETE
+        FROM
+        book_details
+        WHERE
+        bookcode IN
+        <foreach collection="bookcodes" index="index" item="bookCode" open="(" separator="," close=")">
+            #{bookCode}
+        </foreach>
+        <if test="ids!=null">
+            AND id IN
+            <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
+    <delete id="deleteBookAuthor">
+        DELETE
+        FROM
+        book_author
+        WHERE
+        bookcode IN
+        <foreach collection="bookCodes" index="index" item="bookCode" open="(" separator="," close=")">
+            #{bookCode}
+        </foreach>
+    </delete>
+    <delete id="deleteBookContent">
+        DELETE
+        FROM
+        book_content
+        WHERE
+        bookcode IN
+        <foreach collection="bookCodes" index="index" item="bookCode" open="(" separator="," close=")">
+            #{bookCode}
+        </foreach>
+    </delete>
+    <delete id="deleteBookFile">
+        DELETE
+        FROM
+        book_file
+        WHERE
+        bookcode IN
+        <foreach collection="bookCodes" index="index" item="bookCode" open="(" separator="," close=")">
+            #{bookCode}
+        </foreach>
+    </delete>
+
+    <select id="selectAllBookDetails" resultType="com.trs.model.BookDetails">
+        SELECT
+        bd.id,
+        bd.zid,
+        bd.fid,
+        bd.title,
+        bd.TextContent,
+        bd.HtmlContent,
+        bd.entry,
+        bd.source,
+        bd.bookcode,
+        bd.zid_title AS zidTitle,
+        bd.classify,
+        bd.exdate,
+        bd.people,
+        bd.exdata,
+        bd.exarea,
+        bd.abs,
+        CONCAT( bd.bookname, bd.bookyear, "卷" ) AS bookname
+        FROM
+        book_details bd
+        WHERE
+        bd.entry = #{entry}
+        AND bd.classify="ct"
+        <if test="state!=null or ''.equals(state)">
+            AND bd.source = #{state}
+        </if>
+        <if test="nameEntry!=null or ''.equals(nameEntry)">
+            <bind name="myNameEntry" value="'%'+nameEntry+'%'"/>
+            AND bd.bookname LIKE #{myNameEntry}
+        </if>
+        <if test="yearEntry!=null or ''.equals(yearEntry)">
+            <bind name="myYearEntry" value="'%'+yearEntry+'%'"/>
+            AND bd.bookyear LIKE #{myYearEntry}
+        </if>
+        <if test="search!=null or ''.equals(search)">
+            <bind name="myTitle" value="'%'+search+'%'"/>
+            AND bd.title LIKE #{myTitle}
+        </if>
+        ORDER BY bd.bookyear DESC
+        LIMIT #{currPage},
+        #{pageSize}
+    </select>
+    <select id="selectBookDetailsCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT( 1 )
+        FROM
+        book_details bd
+        WHERE
+        bd.entry = #{entry}
+        AND bd.classify="ct"
+        <if test="state!=null or ''.equals(state)">
+            AND bd.source = #{state}
+        </if>
+        <if test="nameEntry!=null or ''.equals(nameEntry)">
+            <bind name="myNameEntry" value="'%'+nameEntry+'%'"/>
+            AND bd.bookname LIKE #{myNameEntry}
+        </if>
+        <if test="yearEntry!=null or ''.equals(yearEntry)">
+            <bind name="myYearEntry" value="'%'+yearEntry+'%'"/>
+            AND bd.bookyear LIKE #{myYearEntry}
+        </if>
+        <if test="search!=null or ''.equals(search)">
+            <bind name="myTitle" value="'%'+search+'%'"/>
+            AND bd.title LIKE #{myTitle}
+        </if>
+    </select>
+    <select id="selectBookDetails" resultType="com.trs.model.BookDetails">
+        SELECT
+            *
+        FROM
+            book_details bd
+        WHERE
+            bd.entry = #{entry}
+            AND bd.id=#{id}
+            AND bd.bookcode=#{bookcode}
+    </select>
+
+    <update id="updateBookDetails">
+        UPDATE book_details bd
+        <set>
+            <if test="title!=null">
+                bd.title = #{title},
+            </if>
+            <if test="source!=null">
+                bd.source = #{source},
+            </if>
+            <if test="htmlContent!=null">
+                bd.HtmlContent = #{htmlContent},
+            </if>
+            <if test="people!=null">
+                bd.people = #{people},
+            </if>
+            <if test="exdate!=null">
+                bd.exdate = #{exdate},
+            </if>
+            <if test="exarea!=null">
+                bd.exarea = #{exarea},
+            </if>
+            <if test="abs!=null">
+                bd.abs = #{abs},
+            </if>
+            <if test="exdata!=null">
+                bd.exdata = #{exdata},
+            </if>
+        </set>
+        WHERE
+        bd.id = #{id}
+    </update>
+</mapper>

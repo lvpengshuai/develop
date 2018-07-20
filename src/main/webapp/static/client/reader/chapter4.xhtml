@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<head>
+<link href="../Styles/main.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript"
+	src="http://121.199.58.173:8080/website/static/reader/libs/jquery-2.0.3.min.js" />
+<script type="text/javascript"
+	src="http://121.199.58.173:8080/website/static/reader/libs//yd/selectionmenu.js" />
+<link type="text/css" rel="stylesheet"
+	href="http://121.199.58.173:8080/website/static/reader/libs//yd/selectionmenu.css" />
+<script type="text/javascript" src="http://121.199.58.173:8080/website/static/reader/libs//yd/rangy-core.js"></script>
+<script type="text/javascript" src="http://121.199.58.173:8080/website/static/reader/libs//yd/rangy-classapplier.js"></script>
+<script type="text/javascript" src="http://121.199.58.173:8080/website/static/reader/libs//yd/rangy-highlighter.js"></script>
+<script type="text/javascript">
+	SelectionMenu
+			.addEvent(
+					window,
+					'load',
+					function() {
+					
+						new SelectionMenu(
+								{
+									container : document
+											.getElementById('contentDiv'),
+									id : 'selection-menu',
+									menuHTML :  $("#selectTextPupupMenu").html(),
+									handler : function(e) {
+										var target = e.target || e.srcElement,
+										id = target.id,
+										selectedText = this.selectedText,
+										query = encodeURI(selectedText.replace(/\s/g, '+')),
+										searchURI;
+										if (id == "copy-text-btn") {
+											reportSelectionText();
+										}
+									}
+								});
+
+					});
+</script>
+<script type="text/javascript">
+        var serializedHighlights = decodeURIComponent(window.location.search.slice(window.location.search.indexOf("=") + 1));
+        var highlighter;
+
+        var initialDoc;
+
+        window.onload = function() {
+            rangy.init();
+
+            highlighter = rangy.createHighlighter();
+
+            highlighter.addClassApplier(rangy.createClassApplier("highlight", {
+                ignoreWhiteSpace: true,
+                tagNames: ["span", "a"]
+            }));
+
+            highlighter.addClassApplier(rangy.createClassApplier("note", {
+                ignoreWhiteSpace: true,
+                elementTagName: "a",
+                elementProperties: {
+                    href: "#",
+                    onclick: function() {
+                        var highlight = highlighter.getHighlightForElement(this);
+                        if (window.confirm("Delete this note (ID " + highlight.id + ")?")) {
+                            highlighter.removeHighlights( [highlight] );
+                        }
+                        return false;
+                    }
+                }
+            }));
+
+
+            if (serializedHighlights) {
+                highlighter.deserialize(serializedHighlights);
+            }
+        };
+
+
+        function highlightSelectedText() {
+            highlighter.highlightSelection("highlight");
+        }
+
+        function noteSelectedText() {
+            highlighter.highlightSelection("note");
+        }
+
+        function removeHighlightFromSelectedText() {
+            highlighter.unhighlightSelection();
+        }
+
+        function highlightScopedSelectedText() {
+            highlighter.highlightSelection("highlight", { containerElementId: "summary" });
+        }
+
+        function noteScopedSelectedText() {
+            highlighter.highlightSelection("note", { containerElementId: "summary" });
+        }
+
+        function reloadPage(button) {
+            button.form.elements["serializedHighlights"].value = highlighter.serialize();
+            button.form.submit();
+        }
+        function reportSelectionText() {
+        	copy_code( rangy.getSelection().toString() );
+        }
+    </script>
+    
+		
+<title>第一章 父亲异人</title>
+</head>
+
+<body>
+	<div id="contentDiv">
+		<h1 class="center">
+			<a href="../Text/content.xhtml#toc5">第一章 父亲异人</a>
+		</h1>
+
+		<p class="left" id="bw1"></p>
+
+		<h2 class="center">
+			<a href="../Text/content.xhtml#toc6">父子惨居邯郸城</a>
+		</h2>
+
+		<p class="left">孟子曾经说过：“故天将降大任于斯人也，必先苦其心志，劳其筋骨，饿其体肤，空乏其身，行拂乱其所为，所以动心忍性，增益其所不能。”</p>
+
+		<p class="left">这句话，用在千古一帝秦始皇身上，也同样适合。</p>
+
+		<p class="left">九岁前的秦始皇，如果用一个词来形容的话，这四个字最贴切：生不如死。</p>
+
+		<p class="left">要知道，小时候的秦始皇，即使再落魄，也是秦国王室的直系子孙，如果按照现在某些连续剧的模式，他应该是个超级牛人，完全可以无法无天，想干啥就干啥，打个奴才，鱼肉个百姓，都应该是家常便饭。但是对于小时候的秦始皇而言，这些都只是一个梦，因为他现在的身份，不是王子，而是“质子”。</p>
+
+		<p class="left">战国时期，为了表示互相尊重主权和领土完整、和平共处，诸侯国与诸侯国之间，都要互派公子为人质，简称为“质子”。</p>
+
+		<p class="left">表面上，质子的地位都比较高，活得很有尊严；实际上，“质子”就是人质，一旦国与国之间发生战争，质子首先遭殃，不仅是敌方发泄的首选，还可能成为祭旗的对象，何况那还是一个今天歃血为盟、明天就兵临城下的战国时代。</p>
+
+		<p class="left">秦始皇的父亲异人，就是为了显示秦、赵和好，而被秦国派到赵国的“质子”。</p>
+
+		<p class="left">一般来说，强国派到弱国的质子，弱国的人民都要巴结、逢迎，生怕怠慢了这位“爷”，导致强国派兵讨伐。所以秦朝派往其他国家的质子，生活得都不错，唯独一个例外——派往赵国的质子异人。</p>
+
+		<p class="left">赵国为什么不巴结秦国的质子呢？因为赵国也是一个强国，它刚刚经过“胡服骑射”，国力迅速强大。</p>
+
+		<p class="left">当时的局势很明显，秦国与赵国是当时最强大的两个国家，而且他们都野心勃勃，意欲统一天下，他们之间肯定会爆发一场大战。在这种背景下，异人父子的生活待遇，可想而知。</p>
+
+		<p class="left">从秦始皇出生的那天起，历史就给他好好地上了一课，只不过题目叫“什么叫世态炎凉”。</p>
+
+		<p class="left">从三岁懂事开始，一直到九岁回咸阳，小时候的秦始皇，活得那叫一个惨。他没有玩具，没有佣人，甚至得不到父亲的宠爱和照顾，只能稀里糊涂地活着，活到可能某天被拉出去祭旗，或者是某天“食物中毒”，暴病身亡为止。更可怕的是，这种生不如死的日子，他根本就看不见结束的那一天。</p>
+
+		<p class="left">如果想摆脱这种生活，除了逃跑当老百姓外，唯一的办法就是重新回到秦国，这也是秦始皇父亲异人的梦想，只是对于现阶段的他来说，回咸阳的“梦想”，就是一个梦，甚至不能想。</p>
+
+		<p class="left">因为，异人的处境很特殊。</p>
+
+		<p class="left">首先，虽然异人的父亲安国君是太子，但是他的祖父秦昭襄王还健在，所以他不是太子，而是王孙。异人与秦王之间，还隔着一群大爷、二大爷。对于秦昭襄王来说，儿子还管不过来呢，根本不会想起这个异国他乡的孙子，更不会召他回秦国。</p>
+
+		<p class="left">其次，异人的父亲安国君有一大堆儿女，光儿子就20多个，异人不是长子，且处于中间偏下的位置，非嫡非长，所以异人不具备立太子的条件，而且他的母亲夏姬也不受宠，根本见不到自己的夫君。所以，在自己父亲眼里，他就是一个无足轻重的小人物，所以才“光荣”地进驻邯郸当质子。</p>
+
+		<p class="left">连自己的亲爷爷、亲父亲都不待见自己，那些在朝堂之上的大臣们，更不会为自己求情。异人如果想回邯郸，除非他中了六合彩，或者天上掉下一个大馅饼。</p>
+
+		<p class="left">佛家云：“世间万物皆因缘而生，因缘聚则物在，因缘散则物灭。”如果你真的信缘分，那么天上真的可能会掉馅饼。</p>
+
+		<p class="left">身在邯郸的异人怎么也不会想到，上天即将赐给他一段奇缘，赐给他一个改变他一生命运的人。</p>
+
+		<p class="left">这个人，不是什么达官显贵，而是一个富可敌国的大商人。</p>
+
+		<p class="left" id="bw2"></p>
+
+		<h2 class="center">
+			<a href="../Text/content.xhtml#toc7">阳翟奇商——吕不韦</a>
+		</h2>
+
+		<p class="left">无论在多么绝望的情况下，也不要放弃希望，坚持下去，就一定能够创造奇迹。</p>
+
+		<p class="right">——当年明月</p>
+
+		<p class="left">即使深陷绝望之中，异人也有希望，因为，他拥有两个绝对的优势。</p>
+
+		<p class="left">第一个优势：他是太子的儿子。</p>
+
+		<p class="left">按照惯例，只要异人的父亲当上了大王，他就有可能当上太子，甚至当上皇帝，虽然机会渺茫。接近于零，并不是等于零，只要没有到零，就还有机会！</p>
+
+		<p class="left">第二个优势；异人所处的环境。</p>
+
+		<p class="left">虽然身处敌国，过着朝不保夕的日子，但是异人居住的地点太好了，他生活的都城，叫做邯郸。</p>
+
+		<p class="left">战国时候的邯郸，是中国最繁华的城市，没有之一。</p>
+
+		<p class="left">在这座雄伟的邯郸城中，男人们“相聚游戏，悲歌慷慨”，女人们则“弹弦踮屐，鼓琴瑟，游媚富贵”。在这里，靡靡之音与放纵的娱乐活动比比皆是，到处都是一派灯红酒绿、霓虹闪烁的气象。</p>
+
+		<p class="left">按照现在的流行说法，这座邯郸城就是一个东方巴黎，绝对是时尚人士的首选。这么一座繁荣昌盛的城市，肯定会吸引各种社会名流、达官显宦，其中也包括各种商人。</p>
+
+		<p class="left">阳翟人吕不韦，就是一名被邯郸吸引而来的商人，而且还是一个“巨商”。</p>
+
+		<p class="left">据《史记·吕不韦传》中记载：“吕不韦，往来贩贱买卖，家累千金。”可见吕不韦的生意之大，足以笑傲江湖了。但是，商人再有钱，也没用。</p>
+
+		<p class="left">在古代社会，一直“重农轻商”，商人再有钱，也没有相应的社会地位。韩非子在他的《五蠹》中就说道，工商之民为“五蠹”之一，就是社会的蛀虫，败坏社会风气，应该就地消灭。</p>
+
+		<p class="left">而纵观中国整个《二十四史》，但凡立传的，都是“贞洁烈女、名臣贤将”，从来没有为商人单独立过传。即使有的话，也只是在《食货志》《货殖列传》中提到过一些，而且还都是反面教材。</p>
+
+		<p class="left">为了摆脱这种窘状，很多商人就不再推销商品了，而是选择推销自己，希望凭借自己的三寸不烂之舌、惊天伟业之功，博得君主的赏识，光宗耀祖，当上一名出色的公务员。</p>
+
+		<p class="left">春秋战国时期，以孔子为首，百里奚、商鞅、范雎、苏秦、张仪、李斯，都是因为成功推销自己而成就一番伟业的。这类人，我们称之为“游士”。而吕不韦，就是一个商人加游士。</p>
+
+		<p class="left">商人，代表着吕不韦有钱；游士，代表着吕不韦有才。凭借着家里的经济基础，加上自己精明的头脑，如果吕不韦想“弃商从政”，那绝对是一件很容易的事情，他所需要的，就是一个机会。</p>
+
+		<p class="left">这个机会，就是异人。</p>
+
+		<p class="left">在这座邯郸城内，当吕不韦第一眼看见异人的时候，他就暗暗下定了决心，这位仁兄，对得起自己的名字，绝对是“天资异类，奇货可居”也。</p>
+
+		<p class="left">为了印证自己的想法，当天晚上，吕不韦就把自己的想法告诉了父亲，而他们的对话，更是被《战国策》详细地记录了下来：</p>
+
+		<p class="left">吕不韦贾于邯郸，见秦质子异人，谓其父曰：耕田之利几倍？曰：十倍。珠玉之赢几倍。曰：百倍。立主定国之赢几倍？曰：无数。</p>
+
+		<p class="left">吕不韦问父亲，搞农业能挣几倍利润？十倍。搞金融业能挣几倍利润？百倍。如果搞个皇帝出来呢？无数。</p>
+
+		<p class="left">十倍的利润，足以让商人为之疯狂了，何况还是“无数”！吕不韦当时就疯狂了，他直接决定，要用自己家累千金的经济基础、聪明的经济头脑，以及完美的营销手段，给异人重新包装，让他发挥自己最大的力量。</p>
+
+		<p class="left">说干就干，吕不韦立刻去拜见异人。听说一个巨商要见自己，异人都傻了：“一个富可敌国的大商人，找我干吗，我一没钱二没势，难道是让我还钱……”正在异人犹豫不决的时候，吕不韦直接闯了进来，吓了异人一跳。</p>
+
+		<p class="left">见面之后，吕不韦毫不避讳，他开门见山地说道：“我能光大你的门庭。”</p>
+
+		<p class="left">听到这番话，异人先是一愣，然后不屑地笑道：“你先光大自己的门庭，再来光大我的门庭吧！”</p>
+
+		<p class="left">此时的异人一定在想：“这人就是一个疯子，你既无官职，又无威望，最多就拥有几个臭钱，居然要光大我的门庭？”</p>
+
+		<p class="left">眼看谈话就要不欢而散，吕不韦不慌不忙地抛出了第二句话：“你不知道，我的门庭，要等待你的门庭光大之后，才会光大。”</p>
+
+		<p class="left">有点意思……</p>
+
+		<p class="left">一个是虽然落魄，但绝不放弃希望的公子；一个是无权无势，但是却野心勃勃的富商。命运让这两个男人撞在了一起，就是让他们干一番惊天动地、轰轰烈烈的大事。</p>
+
+		<p class="left">既然都知道了对方的想法，异人也就放下了戒心。战国策记载：“子楚心知所谓，乃引与坐，深语”，咱们好好聊聊吧。</p>
+
+		<p class="left">吕不韦开始向异人分析现状：“你现在穷困潦倒，无权无势，即使大王薨，安国君为王，你有20多个兄弟，又居中，无权无势的你不具备竞争力，所以无法当太子，如果搞论资排辈，你也没有那么长的命，所以你还是没机会当太子……”</p>
+
+		<p class="left">如果我是异人的话，早就抡袖子扇人了，这些都是既定的事实，你不说方法也就算了，还拿这些出来，难道是为了消遣我！</p>
+
+		<p class="left">即使这样，异人还是忍住怒气问道：“然也，为之奈何？”可见，异人绝对有自己的优点，即使被损，也能放下架子，虚怀若谷、彰显王者气派。要知道，在整部《史记》里面，只有两个人说过“然也，为之奈何”，第一个是他，第二个则是刘邦。</p>
+
+		<p class="left">看见异人不急不躁，吕不韦暗暗高兴，他继续说道：“虽然现在有很多不利的条件，但是只要摆平一个人，大事可成。”</p>
+
+		<p class="left">“谁？”</p>
+
+		<p class="left">“你父亲的第一夫人——华阳。”</p>
+
+		<p class="left" id="bw3"></p>
+
+		<h2 class="center">
+			<a href="../Text/content.xhtml#toc8">吕不韦巧言如簧</a>
+		</h2>
+
+		<p class="left">异人有20多个兄弟，可见他老爸安国君也是一个追求风流快活的主儿。即便如此，安国君也有自己的最爱——他最宠爱的就是华阳夫人，即使安国君有无数个女人，也把她视为最爱，这些年他们夫妻一直举案齐眉、相敬如宾，华阳夫人更是“纵使后宫三千人，也集宠爱于一身”。</p>
+
+		<p class="left">可惜的是，华阳夫人有一个致命的弱点：无子。</p>
+
+		<p class="left">这就要了命了，要知道，在旧社会，不孝有三无后为大，传宗接代那可是头等大事，一个女人要是生不出男孩，就是武则天、慈禧也白搭。</p>
+
+		<p class="left">“无子”的这个弱点，正是吕不韦的突破所在。因为他知道，华阳夫人虽然无子，但是她的一句话，却可以决定谁是太子！</p>
+
+		<p class="left">已经说服了异人，发现了突破的地方，且看吕不韦如何对异人进行包装吧。吕不韦的公关手段，绝对让后人顶礼膜拜。</p>
+
+		<p class="left">第一步：吕不韦拿出自己一半的家产，即五百两黄金供异人消遣，让异人换新衣服，买一辆好点儿的车，广交赵国政要及各国使节，打出自己的品牌，改变自己的形象，让自己的名号传遍大江南北，传回秦国。让他的爷爷、老爸知道，赵国的首都邯郸还有一位很“牛”的秦国王子。</p>
+
+		<p class="left">第二步：在异人打出自己的名号，跻身上流社会后，吕不韦又收集了很多的奇珍异宝，西行入咸阳，求见安国君和华阳夫人。</p>
+
+		<p class="left">这次会见，吕不韦什么都没说，只是混了一个脸熟。他为什么要这样做呢？难道吕不韦会让自己的金钱打水漂吗？</p>
+
+		<p class="left">如果直接说，他就不是吕不韦了。面对异人，是面对一个穷困潦倒、无权无势的落魄公子，如果拐弯抹角地叙述，很可能让异人起疑心，进而成为惊弓之鸟，还不如直截了当、开门见山。如果异人犹豫了，也正好说明他胸无大志，不是奇货可居，吕不韦连钱都省了。但是对华阳夫人，这套方法就行不通了。</p>
+
+		<p class="left">尽管华阳夫人是一介女流，但也是经过宫廷PK、百里挑一的宠妃，不可能被轻易忽悠的。</p>
+
+		<p class="left">如果吕不韦告诉她：“你没有孩子，你看异人这个孩子如何？”这不是挑明了告诉她，我给你介绍一个居心叵测的孩子。所以这种事情，不能心急。</p>
+
+		<p class="left">当然了，吕不韦是一个商人，商人不会胡乱投资的，这次花钱换脸熟的举动，可以让吕不韦认识两个人，而这两个人，才是搞定华阳夫人的突破口。</p>
+
+		<p class="left">第三步：吕不韦找到了华阳夫人的姐姐和弟弟阳泉君，开始公关。</p>
+
+		<p class="left">《战国策》里详细地记载了这次公关的全过程。</p>
+
+		<p class="left">华阳夫人的两个姐弟都是色厉胆薄、胸无大志之人，平时没有什么爱好，就喜欢敛钱。对付这种人，吕不韦的突破口就在“钱”上面。</p>
+
+		<p class="left">吕不韦告诉他们：“你们现在家里财宝无数，宝马良驹在院子里闲逛，美人更是数不胜数，朝中大臣能不眼红吗？虽然你们现在没事，但是你们也不想想，一旦太子即位，届时执掌后宫的自然是太子之母，还能是你们的姐姐吗？你们姐姐失宠了，你们的这些财宝，还不知道归谁所有呢？”</p>
+
+		<p class="left">这几句话，把阳泉君说得无言以对、一身冷汗，华阳夫人的姐姐更是浑身直哆嗦，差点儿昏了过去。</p>
+
+		<p class="left">看见他们不说话，吕不韦接着说道：“眼下夫人之貌如春花之艳，安国君之宠如东海之深，夫人应该在诸子中选一贤者收为义子，他日安国君登基，此子必为太子。即便安国君百年之后，此子也必承王位，大人一家的权势也可安如泰山。”</p>
+
+		<p class="left">听到这番话，阳泉君如梦方醒，他支支吾吾地说道：“只是安国君二十余子，各有其母，谁肯为华阳夫人所收养？”</p>
+
+		<p class="left">等的就是你这句话，吕不韦内心高兴得不行，但是他还要再按捺一下心中的喜悦，因为他还有一番话没有说。</p>
+
+		<p class="left">吕不韦继续说道：“那还不简单，寻找义子，要找其母早逝、孤立无援、身居国外的，这样才能感恩戴德，孝敬夫人。除此之外，还要谦而有礼、勤而好学，有君子之风，才能荣登大宝……”</p>
+
+		<p class="left">对于这种说法，华阳夫人的姐姐和弟弟表示赞同，但是他们有一个疑虑，秦国还有这种的子孙吗？</p>
+
+		<p class="left">转了一个大圈，终于讲到正题上了，吕不韦强行按捺内心的激动，慢慢地说道：“有啊，不韦在赵经商，常听邯郸城中公卿大臣说……”</p>
+
+		<p class="left">后面的话就不说了。对于两个被完全洗脑的人，吕不韦说的话，比他们老爸说的话都好使。当天晚上，他们就冲到华阳夫人的面前，痛哭流涕，以死相逼，哭着喊着要华阳夫人收异人为义子，好保住他们现在所拥有的家产。</p>
+
+		<p class="left">虽然华阳夫人对异人不是很了解，但是她姐姐、弟弟说的话，确实也是华阳夫人所忌讳的，为了自己的荣华富贵，华阳夫人决定找吕不韦来，听听他的意见。</p>
+
+		<p class="left">还听啥呀，如果吕不韦放弃了这个机会，他就不是吕不韦了。对付华阳夫人的姐姐、弟弟，要晓以他们的利害，说钱；而对付华阳夫人，则要涉及她的利益：情。</p>
+
+		<p class="left">对于收养义子的父母来说，最怕的是什么？不孝。</p>
+
+		<p class="left">辛辛苦苦养了十几年，最后养成了一只白眼狼，这是华阳夫人最害怕的问题；而吕不韦，恰恰就是针对这个问题，来展开自己的攻击。</p>
+
+		<p class="left">吕不韦说道：“异人谈及秦国及夫人，未尝不伤心落泪，思念之情溢于言表；自知在诸子中居后，其母又早逝，且身居国外、孤立无援，愿意依附夫人；夫人若能将此子收为养子，则异人无国而有国，夫人无子而有子。他日一旦主持秦国之政，还不全凭夫人主持？”</p>
+
+		<p class="left">百里之外，背井离乡，自己都吃不饱，还会为夫人流眼泪？虽然这些全是假的，但是吕不韦这么一说，还是说得华阳夫人心花怒放、眉开眼笑，慢慢地，她也对异人产生了好感。</p>
+
+		<p class="left">至此，吕不韦用其圆滑的智慧，见人说人话、见鬼说鬼话的本领，彻底为异人打开了成功之门，而他也因为这一战，成为了战国时期最出色的商人、游士，兼公关部经理。</p>
+
+		<p class="left">但是很可惜，吕不韦虽然是一个合格的说客，却是一个蹩脚的政治家，如果他的政治水平也像他的舌头一样厉害的话，他也不会迎来那么悲惨的结局。当然这是后话，至少现在，他还是一个成功者，成功游说了华阳夫人，接着就要看异人自己的了。如果华阳夫人不喜欢异人，那吕不韦的一切努力都是白搭。</p>
+
+		<p class="left">面对游说华阳夫人这个艰巨的任务，异人到底行不行呢？</p>
+
+		<p class="left" id="bw4"></p>
+
+		<h2 class="center">
+			<a href="../Text/content.xhtml#toc9">华阳夫人完全中计</a>
+		</h2>
+
+		<p class="left">异人当然行，不是一般的行，而是非常行。</p>
+
+		<p class="left">多年颠沛流离、孤苦伶仃的生活，锻炼了异人奇高的情商。不管是真心的，还是虚情假意的，异人真把华阳夫人当成了自己的生母。</p>
+
+		<p class="left">当得知华阳夫人是楚国人、喜欢楚国服装后，异人立刻找了一件楚国的衣服，还刻苦学习楚国的礼仪舞蹈。这些举动，让华阳夫人心花怒放，她亲自为异人更名，取名“子楚”。</p>
+
+		<p class="left">这还不算，异人还极力孝顺华阳夫人，“亲尝汤药、啮指痛心、扇枕温衾、尝粪忧心”，把华阳夫人感动得哇哇的。</p>
+
+		<p class="left">被感动的华阳夫人当机立断：“愿得子楚立为嫡嗣，以托吾身。”</p>
+
+		<p class="left">华阳夫人这关过了，就剩下最后一个Boss了——异人的父亲，太子安国君。事实证明，过这道最终的关卡根本不费事，因为摆平安国君的，正是他的“第一夫人”——华阳。</p>
+
+		<p class="left">我们看历史书，评价一个人办事情迅速：如暴风骤雨一般，快速而严谨地办完。殊不知，最猛的风，不是暴风，而是枕头风；最狠的雨，也不是暴雨，而是“梨花带泪”。</p>
+
+		<p class="left">“温柔细语”外加“柔情带泪”，再绝情的男人也没招呀。“千金难买美人笑”，只要你能高兴，让我干什么都行，不就是认个义子吗，让我认干爹都行。</p>
+
+		<p class="left">至此，异人终于成为了华阳夫人的义子。如今的他，再也不是那个邯郸的落魄王孙了，而是大秦的国之储君！</p>
+
+		<p class="left">而吕不韦，也完成了自己人生的转变，虽然他还是那个南来北往、跑东跑西的商人，但是他一手打造了一个帝国的君王！假以时日，吕不韦的前途不可限量。</p>
+
+		<p class="left">就在他们两人欢呼雀跃的时候，命运女神和他们开了一次玩笑，而这次玩笑，不仅毁了他们之前的所有努力，还差点要了他们的命……这是后话，我们先来看一下当时的局势。</p>
+	</div>
+	<div id="selectTextPupupMenu">
+	<div class="reader-pop has-arrow-pop reader-select-pop select-a-t"
+		id="select-text" style="top: 239px; left: 506px;" data-note-key="">
+		<div class="abox" style="left: 30px;">
+			<div class="a1"></div>
+			<div class="a2"></div>
+		</div>
+		<ul class="select-area">
+			<li><a class="select-item copy-text"
+				id="copy-text-btn" style="z-index: 9000;">复制</a></li>
+			<li style="display: inline-block;"><a 
+				class="select-item add-underline">划词</a></li>
+			<li style="display: none;"><a 
+				class="select-item cancel-underline">清除划线</a></li>
+			<li><a target="_blank"
+				class="select-item modify-note">笔记</a></li>
+			<li><a href="###" class="select-item share">分享</a></li>
+		</ul>
+		<ul class="color-area">
+			<li><a href="###" data-color="0"
+				class="color-item color0 add-underline"><span class="color-icon"></span></a></li>
+			<li><a href="###" data-color="1"
+				class="color-item color1 add-underline"><span class="color-icon"></span></a></li>
+			<li><a href="###" data-color="2"
+				class="color-item color2 add-underline"><span class="color-icon"></span></a></li>
+			<li><a href="###" data-color="3"
+				class="color-item color3 add-underline"><span class="color-icon"></span></a></li>
+			<li><a href="###" data-color="4"
+				class="color-item color4 add-underline"><span class="color-icon"></span></a></li>
+		</ul>
+	</div>
+	</div>
+	
+	<textarea id="content" rows="10" cols="60">sfdfdfdfdf</textarea>
+	<input id="copy" type="button" data-clipboard-target="content" value="copy"/><!-- 这里是JS代码部分 -->
+		<!-- 这里是JS代码部分 -->
+	<script type="text/javascript" src="http://121.199.58.173:8080/website/static/reader/libs//dist/ZeroClipboard.min.js"></script>
+	<script type="text/javascript">
+	// 将【复制】按钮充当复制数据的元素载体
+	var clip = new ZeroClipboard( document.getElementById("copy") );
+	</script>
+	</body>
+
+</html>

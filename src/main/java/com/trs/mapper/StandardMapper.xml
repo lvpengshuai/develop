@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trs.mapper.StandardMapper">
+    <!-- 定义sql查询片段 -->
+    <sql id="where_query">
+        <if test="search != null and search != ''">
+            and ch_name like '%${search}%'
+        </if>
+        <if test="state != null and state != ''">
+            and state = #{state}
+        </if>
+    </sql>
+    <!-- 自定义map -->
+    <resultMap id="map" type="standard">
+        <result column="id" property="id"/>
+        <result column="book_id" property="bookId"></result>
+        <result column="standard_id" property="standardId"/>
+        <result column="ch_name" property="chName"/>
+        <result column="en_name" property="enName"/>
+        <result column="international_standard_category_id" property="internationalStandardCategoryId"/>
+        <result column="ch_standard_category_id" property="chStandardCategoryId"/>
+        <result column="standard_category" property="standardCategory"/>
+        <result column="execute_date" property="executeDate"/>
+        <result column="push_company" property="pushCompany"/>
+        <result column="present_company" property="presentCompany"/>
+        <result column="put_company" property="putCompany"/>
+        <result column="draft_company" property="draftCompany"/>
+        <result column="standard_state" property="standardState"/>
+        <result column="replace_state" property="replaceState"/>
+        <result column="pub_date" property="pubDate"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result property="pdfWenJian" column="pdf_wenjian"/>
+        <result column="pdf_url" property="pdfUrl"/>
+        <result column="keyword" property="keyWord"/>
+        <result column="standard_new_state" property="standardNewState"/>
+    </resultMap>
+    <!-- 分页查看所有数据 -->
+    <select id="findAll" parameterType="map" resultMap="map">
+        SELECT * FROM standard
+        <where>
+            <include refid="where_query"/>
+        </where>
+        <if test="sort == 'pubDate'">
+            ORDER BY
+            pub_date
+            ${order}
+        </if>
+        <if test="sort == 'gmtCreate'">
+            ORDER BY
+            gmt_create
+            ${order}
+        </if>
+        limit #{currPage},#{pageSize}
+    </select>
+    <!-- 返回所有数据总数，用于分页 -->
+    <select id="total" resultType="int">
+        select count(*) from standard
+        <where>
+            <include refid="where_query"/>
+        </where>
+    </select>
+
+    <!-- 通过id查询数据 -->
+    <select id="findDatasById" parameterType="int" resultMap="map">
+        select * from standard where id = #{id}
+    </select>
+
+    <!-- 通过id删除数据 -->
+    <delete id="deleteDatasById" parameterType="int">
+        DELETE FROM standard where id = #{id}
+    </delete>
+
+    <!-- 发布,撤销资源 -->
+    <update id="change" parameterType="standard">
+        UPDATE standard set state = #{state} where id = #{id}
+    </update>
+
+    <!-- 导入资源 -->
+    <insert id="add" parameterType="standard" useGeneratedKeys="true" keyProperty="id">
+        INSERT into standard(
+        id,
+        book_id, standard_id, ch_name, en_name,
+        international_standard_category_id, ch_standard_category_id,
+        country, standard_category, execute_date, push_company,
+        present_company, put_company, draft_company,
+        drafter, press, pricing, intro,
+        standard_state, replace_state, pages,
+        state, pub_date, gmt_create, gmt_modified,
+        pdf_url,pdf_wenjian,keyword,standard_new_state
+        )
+        VALUES
+        (
+        DEFAULT,
+        #{bookId},#{standardId},#{chName},#{enName},#{internationalStandardCategoryId},
+        #{chStandardCategoryId},#{country},#{standardCategory},#{executeDate},#{pushCompany},
+        #{presentCompany},#{putCompany},#{draftCompany},#{drafter},
+        #{press},#{pricing},#{intro},#{standardState},#{replaceState},
+        #{pages},#{state},#{pubDate},#{gmtCreate},
+        #{gmtModified},#{pdfUrl},#{pdfWenJian},#{keyWord},#{standardNewState}
+        )
+    </insert>
+
+    <update id="updateStandard" parameterType="Standard">
+        update standard
+        <set>
+            <if test="chName != null and chName != ''">
+                ch_name = #{chName},
+            </if>
+            <if test="standardId != null and standardId != ''">
+                standard_id = #{standardId},
+            </if>
+            <if test="drafter != null and drafter != ''">
+                drafter = #{drafter},
+            </if>
+            <if test="press != null and press != ''">
+                press = #{press},
+            </if>
+            <if test="internationalStandardCategoryId != null and internationalStandardCategoryId != ''">
+                international_standard_category_id = #{internationalStandardCategoryId},
+            </if>
+            <if test="chStandardCategoryId != null and chStandardCategoryId != ''">
+                ch_standard_category_id = #{chStandardCategoryId},
+            </if>
+            <if test="pubDate != null">
+                pub_date = #{pubDate},
+            </if>
+            <if test="executeDate != null">
+                execute_date = #{executeDate},
+            </if>
+            <if test="intro != null and intro != ''">
+                intro = #{intro},
+            </if>
+            <if test="state != null and state != ''">
+                state = #{state},
+            </if>
+            <if test="keyWord != null and keyWord != ''">
+                keyword = #{keyWord},
+            </if>
+            <if test="pdfUrl != null and pdfUrl != ''">
+                pdf_url = #{pdfUrl}
+            </if>
+            <if test="standardNewState != null and standardNewState != ''">
+                standard_new_state = #{standardNewState}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 测试查询所有标准 -->
+    <select id="find" resultMap="map">
+        select
+        standard_id,ch_name,id,standard_state,drafter,draft_company
+        from standard;
+    </select>
+
+    <!-- 查询代替标准 -->
+    <select id="findDataByReplace" parameterType="string" resultMap="map">
+        SELECT standard_id  from standard where replace_state = #{VALUE}
+    </select>
+
+    <!-- 查询标准 -->
+    <select id="findStandarByBianHao" parameterType="string" resultMap="map">
+        SELECT standard_id from standatd where standard_id = #{VALUE}
+    </select>
+</mapper>

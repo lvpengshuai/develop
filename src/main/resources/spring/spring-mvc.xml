@@ -1,0 +1,112 @@
+	<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:task="http://www.springframework.org/schema/task"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+	<!-- 自动扫描注解功能 -->
+	<context:component-scan base-package="com.trs.*"/>
+	<!-- 定时器注解 -->
+	<!--<task:annotation-driven/>-->
+
+	<!-- 切面注解扫描 -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+
+	<!-- 使用springMVC 当访问静态资源时 启用默认路径 -->
+	<mvc:resources mapping="/static/client/**" location="/static/client/" />
+	<mvc:resources mapping="/static/admin/**" location="/static/admin/" />
+	<mvc:resources mapping="/static/remark/**" location="/static/remark/" />
+	<!-- 视图解析器 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- JSON返回 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/plain;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	 <!-- 创建上传文件工具 -->
+	<bean id="multipartResolver" class="com.trs.core.util.FCommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="maxUploadSize" value="10485760000" />
+		<property name="maxInMemorySize" value="1024000000" />
+	</bean>
+
+	<!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="maxUploadSize" value="2000000000" />
+		<property name="maxInMemorySize" value="1000000" />
+	</bean>-->
+
+	<!-- 后台登录拦截器 -->
+	<mvc:interceptors>
+		<bean class="com.trs.core.interceptor.AdminLoginInterceptor"/>
+		<bean class="com.trs.core.interceptor.ClientLoginInterceptor"/>
+	</mvc:interceptors>
+	<!-- 自定义日期转换 -->
+	<bean id="dateConverter"
+		  class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<bean class="com.trs.core.converter.DateConverter"></bean>
+			</set>
+		</property>
+	</bean>
+
+	<mvc:annotation-driven conversion-service="dateConverter" />
+
+
+	<!-- 全局异常处理器 -->
+	<!--<bean id="exceptionResolver" class="com.trs.core.exception.OverallExceptionResolver"></bean>-->
+
+	<!-- 全局异常配置 -->
+	<!-- 全局异常处理.-->
+	<!--<bean id="exceptionHandler" class="com.trs.core.exception.ExceptionHandler"/>-->
+	<!--<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">-->
+		<!--<property name="exceptionMappings">-->
+			<!--<props>-->
+				<!--<prop key="java.lang.Exception">client/error/500</prop>-->
+				<!--<prop key="java.lang.IllegalArgumentException">client/error/500</prop>-->
+				<!--<prop key="java.lang.Throwable">client/error/500</prop>-->
+				<!--<prop key="com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException">client/error/500</prop>-->
+			<!--</props>-->
+		<!--</property>-->
+		<!--<property name="statusCodes">-->
+			<!--<props>-->
+				<!--<prop key="client/error/500">500</prop>-->
+			<!--</props>-->
+		<!--</property>-->
+		<!--&lt;!&ndash; 设置日志输出级别，不定义则默认不输出警告等错误日志信息 &ndash;&gt;-->
+		<!--<property name="warnLogCategory" value="WARN"></property>-->
+		<!--&lt;!&ndash; 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 &ndash;&gt;-->
+		<!--<property name="defaultErrorView" value="client/error/400"></property>-->
+		<!--&lt;!&ndash; 默认HTTP状态码 &ndash;&gt;-->
+		<!--<property name="defaultStatusCode" value="200"></property>-->
+	<!--</bean>-->
+
+</beans>

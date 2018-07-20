@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trs.mapper.BookDetailsMapper">
+    <!--  <sql id="Base_Column_List">
+        id,zid,fid,title,content,contentHTML,content_pdf,entry,source,bookcode,zid_title,keyword,is_min_node,pdfpage,bookpage
+      </sql>-->
+    <resultMap id="bookDetails" type="com.trs.model.BookDetails">
+        <id column="id" property="id"/>
+        <result column="zid" property="zid"/>
+        <result column="fid" property="fid"/>
+        <result column="title" property="title"/>
+        <result column="TextContent" property="textContent"/>
+        <result column="HtmlContent" property="htmlContent"/>
+        <result column="content_pdf" property="contentPdf"/>
+        <result column="entry" property="entry"/>
+        <result column="source" property="source"/>
+        <result column="bookcode" property="bookcode"/>
+        <result column="zid_title" property="zidTitle"/>
+        <result column="keyword" property="keyword"/>
+        <result column="is_min_node" property="isMinNode"/>
+        <result column="pdfpage" property="pdfpage"/>
+        <result column="bookpage" property="bookpage"/>
+        <result column="readCount" property="readCount"/>
+        <result column="classify" property="classify"/>
+        <result column="abs" property="abs"/>
+        <result column="exdate" property="exdate"/>
+        <result column="exarea" property="exarea"/>
+    </resultMap>
+    <!--获取对应bookcode的图书词条-->
+    <select id="getEntrys" resultMap="bookDetails">
+        SELECT * FROM book_details where bookcode=#{bookcode} AND entry=#{entry}  ORDER BY id
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+    <!--获取对应bookcode的图书词条总数-->
+    <select id="getEntrysCount" resultType="Integer">
+        SELECT count(1) FROM book_details where bookcode=#{bookcode} AND entry=#{entry}
+    </select>
+    <!--根据年鉴code及其他条件筛选出本年鉴详情-->
+    <select id="getBookDetailsList" parameterType="BookDetails" resultMap="bookDetails">
+        SELECT * FROM book_details where bookcode=#{bookcode}
+        <if test="fid != null">AND fid=#{fid}</if>
+        <if test="classify != null">AND classify=#{classify}</if>
+        AND depth&lt;&gt;"0"
+        ORDER BY id
+    </select>
+    <!--根据年鉴code获取对应的热门文章-->
+    <select id="getHotArticles" parameterType="String" resultMap="bookDetails">
+        SELECT * FROM book_details where bookcode=#{bookcode} AND classify='wz'
+        ORDER BY readCount DESC limit 10
+    </select>
+    <!--根据zid获取一级目录-->
+    <select id="getFirstCatalogByZid" parameterType="String" resultMap="bookDetails">
+        SELECT * FROM book_details where bookcode=#{bookcode} AND zid=#{zid} AND classify='ml'
+    </select>
+    <!--根据zid获取年鉴详情-->
+    <select id="getBookDetailsByZid" parameterType="String" resultMap="bookDetails">
+        SELECT * FROM book_details where zid=#{zid} AND bookcode=#{bookcode} AND classify='wz'
+    </select>
+    <!--根据zid获取年鉴详情-->
+    <select id="getBookListByZid" parameterType="String" resultMap="bookDetails">
+        SELECT * FROM book_details where zid=#{zid} AND classify='wz' AND bookcode=#{bookcode}
+    </select>
+    <select id="getHtmlContent" resultType="com.trs.model.BookDetails">
+        SELECT *
+        FROM book_details bd
+        WHERE bd.bookcode = #{bookcode}
+        AND bd.entry = "大事记词条"
+        AND bd.classify = 'ct'
+	    ORDER BY bd.exdate
+    </select>
+    <select id="getHtmlContentNum" resultType="Integer">
+        SELECT COUNT(*)
+        FROM book_details bd
+        WHERE bd.bookcode = #{bookcode}
+          AND bd.entry = "大事记词条"
+          AND bd.classify = 'ct'
+    </select>
+    <select id="getBookDetailsAuthor" resultType="com.trs.model.BookDetails">
+SELECT
+	*
+FROM
+	book_details bd
+WHERE
+	bd.bookcode = #{bookcode}
+AND bd.entry = "综述词条"
+AND bd.classify="wz"
+LIMIT #{pageIndex},9
+    </select>
+    <select id="getBookDetailsAuthorNum" resultType="Integer">
+SELECT
+	count(*)
+FROM
+	book_details bd
+WHERE
+	bd.bookcode = #{bookcode}
+AND bd.entry = "综述词条"
+AND bd.classify="wz"
+    </select>
+    <select id="getBookDetailMap" parameterType="BookDetails" resultMap="bookDetails">
+        SELECT * FROM book_details
+        WHERE entry=#{entry}
+        AND bookcode=#{bookcode}
+        AND <![CDATA[ exdate >= #{startTime}
+        AND exdate <= #{endTime} ]]>
+        ORDER BY exdate
+        <if test="exarea != ''">AND exarea=#{exarea}</if>
+    </select>
+    <select id="getHotBookDetailMap" parameterType="BookDetails" resultMap="bookDetails">
+        SELECT * FROM book_details
+        WHERE entry=#{entry}
+        AND bookcode REGEXP #{bookcode}
+        AND <![CDATA[ exdate >= #{startTime}
+        AND exdate <= #{endTime} ]]>
+        <if test="exarea != ''">AND exarea=#{exarea}</if>
+    </select>
+    <select id="getBookDetailTopic" resultType="com.trs.model.BookDetails">
+SELECT * FROM book_details bd WHERE bd.entry="课题词条" AND bd.bookcode=#{bookcode} AND bd.classify="ct" AND bd.source=#{source} LIMIT #{pageIndex},#{currPage}
+    </select>
+    <select id="getBookDetailTopicNum" resultType="Integer">
+        SELECT count(1) FROM book_details bd WHERE bd.entry="课题词条" AND bd.bookcode=#{bookcode} AND bd.classify="ct"
+        <if test="source!=null">
+            AND bd.source=#{source}
+        </if>
+    </select>
+    <!-- 查询source=3 -->
+    <select id="getBookDetailsMechanism" resultType="String">
+        SELECT
+        bd.HtmlContent
+        FROM
+        book_details bd
+        WHERE
+        bd.bookcode = #{bookcode}
+        AND bd.classify = "ct"
+        AND bd.entry = "机构词条"
+        AND bd.zid=#{zid}
+        AND bd.source=#{sourceType}
+    </select>
+    <!-- 查询source=1  or 2 -->
+    <select id="getBookDetailsMechanismType" resultType="com.trs.model.BookDetails">
+        SELECT
+          *
+        FROM
+        book_details bd
+        WHERE
+        bd.bookcode = #{bookcode}
+        AND bd.classify = "ct"
+        AND bd.entry = "机构词条"
+        AND bd.title=#{titleType}
+        AND bd.source=#{sourceType}
+        limit #{pageBegin},#{currPage}
+    </select>
+
+    <!-- 查询总个数 -->
+    <select id="getBookDetailsMechanismTypeCount" resultType="Integer">
+        SELECT count(*)
+        FROM
+        book_details bd
+        WHERE
+        bd.bookcode = #{bookcode}
+        AND bd.classify = "ct"
+        AND bd.entry = "机构词条"
+        AND bd.title=#{titleType}
+        AND bd.source=#{sourceType}
+    </select>
+    <select id="getBookDetailsMechanismTitle" resultType="com.trs.model.BookDetails">
+SELECT
+	*
+FROM
+	book_details bd
+WHERE
+	bd.bookcode = #{bookcode}
+AND bd.entry = "机构词条"
+GROUP BY title ORDER BY CASE WHEN bd.title="其他" THEN 1 ELSE 0 END ,id
+    </select>
+    <select id="getBookDetailMapNum" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM book_details WHERE bookcode=#{bookcode} AND entry=#{type}
+    </select>
+    <select id="getBookDetailsMechanismNum" resultType="java.lang.Integer">
+        SELECT
+	COUNT(1)
+FROM
+	book_details bd
+WHERE
+	bd.bookcode = #{bookcode}
+AND bd.classify = "ct"
+AND bd.entry = "机构词条"
+    </select>
+
+    <select id="getDirectoryByZid" resultType="com.trs.model.BookDetails">
+SELECT
+	*
+FROM
+	book_details
+WHERE
+	1 = 1
+AND bookcode = #{bookcode}
+AND classify = "ml"
+AND (
+	zid = #{zid}
+	OR fid = #{zid}
+)
+    </select>
+
+
+    <update id="setReadCount" parameterType="com.trs.model.BookDetails">
+        UPDATE book_details SET readCount=#{readCount} WHERE zid=#{zid} AND classify='wz' and bookcode=#{bookcode}
+    </update>
+
+    <select id="getCountByEntry" resultType="Map">
+        SELECT
+	(
+		SELECT
+			count(*)
+		FROM
+			book_details
+		WHERE
+			classify = 'wz'
+	) AS wz,
+	(
+		SELECT
+			count(*)
+		FROM
+			book_details
+		WHERE
+			entry = '课题词条'
+	) AS kt,
+	(
+		SELECT
+			count(*)
+		FROM
+			book_details
+		WHERE
+			entry = '大事记词条'
+	) AS dsj,
+	(
+		SELECT
+			count(*)
+		FROM
+			book_details
+		WHERE
+			entry = '图书词条'
+	) AS ts,
+	(
+		SELECT
+			count(*)
+		FROM
+			book_details
+		WHERE
+			entry = '人物词条'
+	) AS rw,
+	(
+		SELECT
+			count(*)
+		FROM
+			book_details
+		WHERE
+			entry = '论文词条'
+	) AS lw,
+	(
+		SELECT
+			count(*)
+		FROM
+			book_details
+		WHERE
+			entry = '机构词条'
+	) AS jg,
+	(
+		SELECT
+			count(*)
+		FROM
+			book_details
+		WHERE
+			entry = '会议词条'
+	) AS hy
+    </select>
+
+
+</mapper>

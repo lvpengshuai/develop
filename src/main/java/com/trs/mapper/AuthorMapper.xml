@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+
+<mapper namespace="com.trs.mapper.AuthorMapper">
+    <resultMap id="authors" type="com.trs.model.Author">
+        <id column="id" property="id"/>
+        <result column="fid" property="fid"/>
+        <result column="personname" property="personname"/>
+        <result column="personblurb" property="personblurb"/>
+        <result column="bookcode" property="bookcode"/>
+    </resultMap>
+    <!--根据id获取图书-->
+    <select id="getBookAuthorByZid" parameterType="String" resultMap="authors">
+        <!--<include refid="Base_Column_List"/>-->
+        SELECT * FROM book_author where fid=#{zid} AND  bookcode=#{bookcode}
+    </select>
+</mapper>

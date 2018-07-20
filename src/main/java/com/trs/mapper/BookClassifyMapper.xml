@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.trs.mapper.BookClassifyMapper">
+    <resultMap id="bookClassifyMap" type="com.trs.model.BookClassify">
+        <id column="id" property="id"/>
+        <result column="bookabbreviate" property="bookabbreviate"/>
+        <result column="name" property="name"/>
+        <result column="image" property="image"/>
+        <result column="order" property="order"/>
+        <result column="mendtime" property="mendtime"/>
+        <result column="count" property="count"/>
+
+    </resultMap>
+
+    <!--查询所有轮播图-->
+    <select id="getBookClassify" resultMap="bookClassifyMap">
+        SELECT * FROM book_classify WHERE counts > 0 ORDER BY sortkey
+    </select>
+
+
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.trs.mapper.EpubMapper">
+    <resultMap id="epubMap" type="com.trs.model.Epub">
+        <id column="id" property="id"/>
+        <result column="bookId" property="bookId"/>
+        <result column="bookName" property="bookName"/>
+        <result column="bookCode" property="bookCode"/>
+        <result column="platform" property="platform"/>
+        <result column="coverUrl" property="coverUrl"/>
+        <result column="bookUrl" property="bookUrl"/>
+        <result column="bookSize" property="bookSize"/>
+        <result column="updatetime" property="updatetime"/>
+        <result column="checkId" property="checkId"/>
+        <result column="createtime" property="createtime"/>
+        <result column="pageSize" property="pageSize"/>
+        <result column="catalogue" property="catalogue"/>
+
+    </resultMap>
+
+    <insert id="insertEpub" parameterType="com.trs.model.Epub">
+        insert into book_epub (bookId,bookName,bookCode,platform,coverUrl,bookUrl,bookSize,updatetime,checkId,createtime,pageSize,catalogue)
+        values (#{bookId},#{bookName},#{bookCode},#{platform},#{coverUrl},#{bookUrl},#{bookSize},#{updatetime},#{checkId},#{createtime},#{pageSize},#{catalogue})
+    </insert>
+
+    <select id="getBookById" resultType="com.trs.model.Epub">
+        SELECT * FROM book_epub  WHERE bookId=#{bookId}
+    </select>
+
+    <select id="selectEpub"  resultMap="epubMap">
+        SELECT * FROM  book_epub WHERE   bookName=#{title}
+    </select>
+
+    <update id="updateEpub" parameterType="com.trs.model.Epub">
+        UPDATE book_epub SET  bookName=#{bookName},bookCode=#{bookCode},platform=#{platform},coverUrl=#{coverUrl},bookUrl=#{bookUrl},bookSize=#{bookSize},updatetime=#{updatetime},
+         checkId=#{checkId} , pageSize=#{pageSize}, catalogue=#{catalogue}
+         where bookId=#{bookId}
+    </update>
+</mapper>

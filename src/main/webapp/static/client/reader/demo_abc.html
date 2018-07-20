@@ -1,0 +1,171 @@
+<html>
+<head>
+<link rel="stylesheet" href="http://localhost:8080/publishweb/static/reader/libs/yd/sm.css" />
+<script type="text/javascript" src="http://localhost:8080/publishweb/static/reader/libs/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="http://localhost:8080/publishweb/static/reader/libs/yd/rangy-core.js"></script>
+<script type="text/javascript" src="http://localhost:8080/publishweb/static/reader/libs/yd/rangy-classapplier.js"></script>
+<script type="text/javascript" src="http://localhost:8080/publishweb/static/reader/libs/yd/rangy-highlighter.js"></script>
+<script type="text/javascript" src="http://localhost:8080/publishweb/static/reader/libs/yd/sm.js"></script>
+<script type="text/javascript" src="http://localhost:8080/publishweb/static/layer/layer.js"></script>
+<script type="text/javascript" src="http://localhost:8080/publishweb/static/reader/libs/dist/ZeroClipboard.js"></script>
+<style type="text/css">
+.colora {
+	background-color: #6BC36F;
+}
+.colorb {
+	background-color: #F1A127;
+}
+.colorc {
+	background-color: #D54E29;
+}
+.colord {
+	background-color: #46A2CE;
+}
+</style>
+<script type="text/javascript">
+	var color_select = 0;
+	var serializedHighlights = decodeURIComponent(window.location.search.slice(window.location.search.indexOf("=") + 1));
+	var highlighter;
+	var clip;
+	var sm;
+
+	function setRangyPostion() {
+		clip.unclip(document.getElementById("copy-text-btn"));
+		clip.clip(document.getElementById("copy-text-btn"));
+	}
+	function copyInit() {
+		clip.setText(rangy.getSelection().toString());
+	}
+	
+	function updateToServer(){
+		$.post(
+			"xxxxxx",
+			{
+				userId:xxxx,
+				bookId:xxxxx,
+				chapterId:xxxxx,
+				chapterUrl:xxxxx,
+				hilighterString:highlighter.serialize()
+			},
+			function(result){
+				$("span").html(result);
+			}
+		);
+	}
+	
+	$(function() {
+		clip = new ZeroClipboard(document.getElementById("copy-text-btn"));
+		
+		rangy.init();
+		highlighter = rangy.createHighlighter();
+		highlighter.addClassApplier(rangy.createClassApplier("colora"));
+		highlighter.addClassApplier(rangy.createClassApplier("colorb"));
+		highlighter.addClassApplier(rangy.createClassApplier("colorc"));
+		highlighter.addClassApplier(rangy.createClassApplier("colord"));
+
+		sm = new SelectionMenu(
+				{
+					container : document.getElementById('contentDiv'),
+					id : 'selection-menu',
+					menuHTML : $("#selectTextPupupMenu").html(),
+					handler : function(e) {
+						var target = e.target || e.srcElement, id = target.id, selectedText = this.selectedText;
+						if (id == "copy-text-btn") {
+							clip.setText(rangy.getSelection().toString());
+							layer.msg('文字已经复制到粘帖板!');
+						} else if (id == "hilight-text-btn") {
+							//alert(color_select);
+							if (color_select == 0)
+								highlighter.highlightSelection("colora");
+							if (color_select == 1)
+								highlighter.highlightSelection("colorb");
+							if (color_select == 2)
+								highlighter.highlightSelection("colorc");
+							if (color_select == 3)
+								highlighter.highlightSelection("colord");
+						} else if (id == "unhilight-text-btn") {
+							//layer.msg("JJJJJJ");
+							//highlighter.unhighlightSelection();
+							//highlighter.removeAllHighlights();
+						} else if (id == "note-text-btn") {
+							layer.open({
+							    type: 1,
+							    content: $('#note_text_div') ,
+							    btn: ['保存', '取消']
+							});
+							
+						} else if (id == "btn_c0") {
+							color_select = 0;
+							highlighter.highlightSelection("colora");
+						} else if (id == "btn_c1") {
+							color_select = 1;
+							highlighter.highlightSelection("colorb");
+						} else if (id == "btn_c2") {
+							color_select = 2;
+							highlighter.highlightSelection("colorc");
+						} else if (id == "btn_c3") {
+							color_select = 3;
+							highlighter.highlightSelection("colord");
+						}
+					}
+				});
+		if (serializedHighlights) {
+            highlighter.deserialize(serializedHighlights);
+        }
+	});
+</script>
+
+
+<title>第一章 父亲异人</title>
+</head>
+
+<body>
+
+	<div id="contentDiv" style="margin-top:100px;">
+		<h1 class="center">
+			<a href="../Text/content.xhtml#toc5">第一章 父亲异人</a>
+		</h1>
+
+		<p class="left" id="bw1"></p>
+
+		<h2 class="center">
+			<a href="../Text/content.xhtml#toc6">父子惨居邯郸城</a>
+		</h2>
+
+		<p class="left">孟子曾经说过：“故天将降大任于斯人也，必先苦其心志，劳其筋骨，饿其体肤，空乏其身，行拂乱其所为，所以动心忍性，增益其所不能。”</p>
+
+		<p class="left">这句话，用在千古一帝秦始皇身上，也同样适合。</p>
+
+		<p class="left">九岁前的秦始皇，如果用一个词来形容的话，这四个字最贴切：生不如死。</p>
+
+		<p class="left">要知道，小时候的秦始皇，即使再落魄，也是秦国王室的直系子孙，如果按照现在某些连续剧的模式，他应该是个超级牛人，完全可以无法无天，想干啥就干啥，打个奴才，鱼肉个百姓，都应该是家常便饭。但是对于小时候的秦始皇而言，这些都只是一个梦，因为他现在的身份，不是王子，而是“质子”。</p>
+
+		<p class="left">战国时期，为了表示互相尊重主权和领土完整、和平共处，诸侯国与诸侯国之间，都要互派公子为人质，简称为“质子”。</p>
+
+		<p class="left">表面上，质子的地位都比较高，活得很有尊严；实际上，“质子”就是人质，一旦国与国之间发生战争，质子首先遭殃，不仅是敌方发泄的首选，还可能成为祭旗的对象，何况那还是一个今天歃血为盟、明天就兵临城下的战国时代。</p>
+
+		<p class="left">秦始皇的父亲异人，就是为了显示秦、赵和好，而被秦国派到赵国的“质子”。</p>
+
+	</div>
+	<div id="selectTextPupupMenu" style="display:none">
+		<div class="reader-pop has-arrow-pop reader-select-pop select-a-t" id="select-text" style="top: 239px; left: 506px;" data-note-key="">
+			<ul class="select-area">
+				<li><a href="#" onMouseOver="copyInit()" class="select-item copy-text" id="copy-text-btn" style="z-index: 9000;">复制</a></li>
+				<li style="display: inline-block;"><a href="#" class="select-item add-underline" id="hilight-text-btn">划词</a></li>
+				<li style="display: inline-block;"><a href="#" class="select-item cancel-underline" id="unhilight-text-btn">清除划线</a></li>
+				<li><a href="#" id="note-text-btn" class="select-item modify-note">笔记</a></li>
+			</ul>
+			<ul class="color-area">
+				<li class="color-item color0"><a id="btn_c0" href="#" data-color="0" class="color-icon"></a></li>
+				<li class="color-item color1 add-underline"><a id="btn_c1" href="###" data-color="1" class="color-icon"></a></li>
+				<li class="color-item color2 add-underline"><a id="btn_c2" href="###" data-color="2" class="color-icon"></a></li>
+				<li class="color-item color3 add-underline"><a id="btn_c3" href="###" data-color="3" class="color-icon"></a></li>
+			</ul>
+		</div>
+	</div>
+</body>
+<div id="note_text_div"  style="display: none;">
+笔记：<br>
+<input type="text" id="" name="">
+</div>
+</html>

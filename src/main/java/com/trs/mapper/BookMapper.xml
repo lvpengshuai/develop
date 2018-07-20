@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.trs.mapper.BookMapper">
+    <resultMap id="bookMap" type="com.trs.model.Book">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="title_en" property="title_en"/>
+        <result column="bookYear" property="bookYear"/>
+        <result column="pubdate" property="pubdate"/>
+        <result column="author" property="author"/>
+        <result column="publishername" property="publisherName"/>
+        <result column="isbn" property="isbn"/>
+        <result column="issn" property="issn"/>
+        <result column="bookType" property="bookType"/>
+        <result column="bookAbbreviate" property="bookAbbreviate"/>
+        <result column="classification" property="classification"/>
+        <result column="charCount" property="charCount"/>
+        <result column="abs" property="abs"/>
+        <result column="cover" property="cover"/>
+        <result column="bookcode" property="bookcode"/>
+        <result column="people" property="people"/>
+        <result column="organ" property="organ"/>
+        <result column="hot" property="hot"/>
+        <result column="keyword" property="keyword"/>
+        <result column="hottype" property="hottype"/>
+        <result column="mainmsg" property="mainmsg"/>
+        <result column="epub" property="epub"/>
+
+    </resultMap>
+
+    <!--根据bookcode获取图书-->
+    <select id="getBookByCode" parameterType="String" resultMap="bookMap">
+        SELECT * FROM book where bookcode=#{bookCode} LIMIT 1
+    </select>
+    <!--根据id查询图书-->
+    <select id="getBookById" parameterType="int" resultMap="bookMap">
+        SELECT * FROM book where id=#{id}
+    </select>
+    <!--首页菜单栏查询图书-->
+    <select id="getBooksIndex" resultType="com.trs.model.Book" parameterType="String">
+        SELECT * FROM book b WHERE b.bookClass=#{bookClass} LIMIT 0,8
+    </select>
+    <!--分类查询图书-->
+    <!--<select id="getBooks" resultMap="yearsMap">-->
+        <!--SELECT-->
+        <!--b.id,-->
+        <!--b.title,-->
+        <!--b.booktype,-->
+        <!--b.abs,-->
+        <!--b.cover,-->
+        <!--b.bookyear,-->
+        <!--b.bookabbreviate,-->
+        <!--b.bookcode,-->
+        <!--SUM(d.readCount) AS hot-->
+        <!--FROM-->
+        <!--book b-->
+        <!--LEFT JOIN book_details d ON b.bookcode = d.bookcode-->
+        <!--<if test="bookClass!=null">-->
+            <!--WHERE-->
+            <!--b.bookClass =#{bookClass}-->
+        <!--</if>-->
+        <!--GROUP BY b.bookabbreviate-->
+        <!--<if test="order!=null">-->
+            <!--ORDER BY-->
+            <!--SUM(d.readCount) DESC-->
+        <!--</if>-->
+        <!--<if test="order==null">-->
+            <!--ORDER BY b.id-->
+        <!--</if>-->
+        <!--LIMIT #{page},6-->
+    <!--</select>-->
+    <select id="getBooks" resultMap="yearsMap">
+        SELECT
+        *,
+        ( SELECT SUM( d.readCount ) FROM book_details d WHERE b.bookabbreviate	= SUBSTR(bookcode,1, LENGTH(bookcode)-4) ) AS hot
+        FROM
+        book b
+        WHERE
+        b.bookyear >= ALL ( SELECT b2.bookyear FROM book b2 WHERE b.`bookabbreviate` = b2.bookabbreviate )
+        ORDER BY
+        ( SELECT SUM( d.readCount ) FROM book_details d WHERE b.bookabbreviate	= SUBSTR(bookcode,1, LENGTH(bookcode)-4) )
+        DESC
+        LIMIT #{page},10
+    </select>
+
+    <select id="getBooksNum" resultType="Integer">
+        SELECT
+        COUNT(DISTINCT b.bookabbreviate) AS num
+        FROM
+        book b
+        <if test="bookClass!=null">
+            WHERE
+            b.bookClass = #{bookClass}
+        </if>
+    </select>
+    <select id="getYears" resultType="BookYears">
+        SELECT * FROM book b WHERE b.bookabbreviate=#{bookabbreviate} ORDER  BY  b.bookyear DESC
+    </select>
+    <resultMap id="yearsMap" type="Book">
+        <collection property="bookYearsList" select="getYears" column="bookAbbreviate"/>
+    </resultMap>
+    <!--查询图书-->
+    <select id="getBookList" parameterType="Book" resultMap="bookMap">
+        SELECT * FROM book where bookabbreviate = #{bookAbbreviate}
+        <if test="id!=null">AND id != #{id}</if>
+        ORDER BY bookyear DESC
+    </select>
+    <!--按热度查询图书-->
+    <select id="getBooksByHot" resultType="com.trs.model.Book">
+        SELECT
+        b.id AS id,
+        b.title AS title,
+        b.cover AS cover,
+        b.bookcode AS bookcode,
+        SUM(bd.readCount) AS hot
+        FROM
+        book b
+        LEFT JOIN book_details bd ON bd.bookcode = b.bookcode
+        GROUP BY
+        b.bookcode
+        ORDER BY
+        SUM(bd.readCount) DESC
+        LIMIT 0,
+        5
+    </select>
+    <!--<select id="getBookByHotType" resultType="com.trs.model.Book">-->
+    <!--SELECT * FROM book b WHERE b.hottype !='2'-->
+    <!--</select>-->
+    <select id="getBookByHotType" resultType="com.trs.model.Book">
+        SELECT
+        *
+        FROM
+        book b
+        ORDER BY
+        b.bookyear DESC,
+        b.id DESC
+        LIMIT 0,
+        20
+    </select>
+    <select id="getBookCategory" resultType="com.trs.model.Book">
+        SELECT
+        *
+        FROM
+        book b
+        <if test="bookClass!=null">
+            WHERE
+            b.bookClass = "学科类年鉴"
+        </if>
+        GROUP BY
+        b.bookabbreviate
+    </select>
+
+    <!--更新epub-->
+    <update id="upBookEpub" parameterType="com.trs.model.Book">
+        UPDATE book SET  epub=#{epub} where title=#{title}
+    </update>
+    <!--查询bookcod-->
+    <select id="selectBookEpub" resultType="com.trs.model.Book">
+        SELECT * FROM book  WHERE title=#{title}
+    </select>
+    <!--查询所有书籍-->
+    <select id="selectBooks" resultMap="bookMap">
+        SELECT * FROM book
+    </select>
+
+    <select id="selectBookByBookabbreviate"  resultMap="bookMap">
+        SELECT * FROM book b WHERE b.bookAbbreviate=#{bookabbreviate} ORDER  BY  b.bookyear DESC LIMIT 1
+    </select>
+
+</mapper>

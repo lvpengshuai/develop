@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trs.mapper.OrganizeMapperOnline">
+
+    <resultMap id="BaseResultMap" type="organize">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="address" property="address"/>
+        <result column="telephone" property="telephone"/>
+        <result column="expiration" property="expiration"/>
+        <result column="role_id" property="roleId"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="status" property="status"/>
+        <result column="max_online" property="maxOnline"/>
+        <result column="file" property="file"/>
+        <result column="start" property="ipStart"/>
+        <result column="end" property="ipEnd"/>
+        <result column="organize_id" property="orgName"/>
+        <result column="code" property="code"/>
+        <result column="bid" property="bid"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, `name`, address, telephone, expiration, role_id, gmt_create, gmt_modified, status,max_online,file
+    </sql>
+    <sql id="Base_Column_List_all">
+        a.id, a.name, a.address, a.telephone, a.expiration, a.role_id, a.gmt_create, a.gmt_modified, a.status,a.max_online,a.file, b.organize_id as organizeId, b.start as ipStart, b.end as ipEnd
+    </sql>
+    <sql id="Base_Column_List_ip">
+        id, organize_id as organizeId, start as ipStart, `end` as ipEnd
+    </sql>
+    <sql id="Base_Column_List_user">
+        organize_id as organizeId, member_id as memberId, is_admin as isAdmin
+    </sql>
+
+    <sql id="sql_where">
+        <where>
+            <if test="search != null and search != ''">
+                name LIKE "%"#{search}"%"
+            </if>
+            <if test="state != null and state != ''">
+                AND status =#{state}
+            </if>
+        </where>
+    </sql>
+
+    <!--添加organize-->
+    <insert id="addOrganizeUser" parameterType="com.trs.model.Organize" useGeneratedKeys="true" keyProperty="id">
+        insert into organize_online
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="telephone != null">
+                telephone,
+            </if>
+            <if test="expiration != null">
+                expiration,
+            </if>
+            <if test="roleId != null">
+                role_id,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="maxOnline != null">
+                max_online,
+            </if>
+            <if test="file != null">
+                file,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="bid != null">
+                bid
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="address != null">
+                #{address},
+            </if>
+            <if test="telephone != null">
+                #{telephone},
+            </if>
+            <if test="expiration != null">
+                #{expiration},
+            </if>
+            <if test="roleId != null">
+                #{roleId},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="maxOnline != null">
+                #{maxOnline},
+            </if>
+            <if test="file != null">
+                #{file},
+            </if>
+            <if test="code != null">
+                #{code},
+            </if>
+            <if test="bid != null">
+                #{bid}
+            </if>
+        </trim>
+    </insert>
+    <insert id="addIp" parameterType="map">
+        INSERT INTO organize_ip (organize_id,start,`end`) VALUES (#{id},#{start},#{end})
+    </insert>
+    <insert id="addOrganizeAdmin" parameterType="map">
+        INSERT INTO organize_user (organize_id,member_id,is_admin) VALUES (#{organizeId},#{memberId},#{isAdmin})
+    </insert>
+
+    <!--根据id查询organize-->
+    <select id="selectOrganizeById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from organize_online
+
+        where id = #{id}
+    </select>
+    <select id="selectIp" parameterType="java.lang.Integer" resultType="map">
+        SELECT
+        <include refid="Base_Column_List_ip"/>
+        FROM
+        organize_ip
+        WHERE organize_id =#{id}
+    </select>
+    <select id="selectOrganizeAdmin" parameterType="java.lang.Integer" resultType="map">
+        SELECT
+        <include refid="Base_Column_List_user"/>
+        FROM
+        organize_user
+        WHERE organize_id =#{id}
+    </select>
+    <select id="selectOrganizeAdminByMember" parameterType="java.lang.Integer" resultType="map">
+        SELECT
+        <include refid="Base_Column_List_user"/>
+        FROM
+        organize_user
+        WHERE member_id =#{id}
+    </select>
+    <select id="selectByName" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from organize_online
+
+        where `name` = #{name}
+    </select>
+    <select id="selectCodeByID" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select
+        code
+        from organize_online
+        where `id` = #{id}
+    </select>
+
+    <!--查询所有organize-->
+    <select id="selectAllOrganizes" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+
+        <include refid="Base_Column_List"/>
+
+        from organize_online
+
+        <include refid="sql_where"/>
+
+        <if test="sort == null or sort == ''">
+            ORDER BY gmt_create DESC
+        </if>
+        <if test="sort == 'gmtCreate'">
+            ORDER BY gmt_create ${order}
+        </if>
+        <if test="sort == 'gmtModified'">
+            ORDER BY gmt_modified ${order}
+        </if>
+        limit #{currPage},#{pageSize}
+    </select>
+    <!--获取可用ip-->
+    <select id="getUsedIp" resultType="map">
+        SELECT * from organize_ip where organize_id in (SELECT id from organize_online where `status` = 0 AND expiration >= #{date})
+    </select>
+
+    <!--获取查询所有organize的记录数-->
+    <select id="total" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM organize_online
+        <include refid="sql_where"/>
+    </select>
+
+    <!--修改organize-->
+    <update id="updateOrganize" parameterType="organize">
+        update organize_online
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone},
+            </if>
+            <if test="expiration != null">
+                expiration = #{expiration},
+            </if>
+            <if test="roleId != null">
+                role_id = #{roleId},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="maxOnline != null">
+                max_online = #{maxOnline},
+            </if>
+            <if test="file != null">
+                file = #{file}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="updateIp" parameterType="map">
+        update organize_ip set start =#{start},`end` =#{end}  where organize_id =#{id}
+    </update>
+
+    <!--修改账户状态-->
+    <update id="changeStatus" parameterType="map">
+        UPDATE organize_online SET status=#{status}, gmt_modified=#{gmtModified} where id =#{id}
+    </update>
+
+    <!--删除organize-->
+    <delete id="deleteOrganizeById" parameterType="java.lang.Integer">
+        delete from organize_online where id = #{id}
+    </delete>
+    <delete id="deleteIp" parameterType="int">
+        DELETE FROM organize_ip WHERE organize_id =#{id}
+    </delete>
+    <delete id="deleteOrganizeAdmin" parameterType="int">
+        DELETE FROM organize_user WHERE organize_id =#{id}
+    </delete>
+    <!--查找bid-->
+    <select id="selectBid" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT bid
+        FROM organize_online WHERE id=#{id}
+    </select>
+
+    <!--通过bid获取机构-->
+    <select id="getOrganizeByBid" parameterType="java.lang.Integer" resultType="organize">
+        SELECT * FROM organize_online WHERE bid=#{bid}
+    </select>
+
+    <!--查找所有得IP-->
+    <select id="selectAllIP"  resultMap="BaseResultMap">
+        SELECT * FROM organize_ip
+    </select>
+
+
+    <!--查找所有得IP-->
+    <select id="selectById"  resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT * FROM organize_online WHERE id=#{orgID}
+    </select>
+
+
+    <!--通过bid获取机构-->
+    <select id="getOrganizeByBidOnline" parameterType="java.lang.Integer" resultType="organize">
+        SELECT id,name,address,telephone,expiration,role_id AS roleId,gmt_create,gmt_modified,status,max_online,file,code,bid FROM organize_online WHERE bid=#{bid}
+    </select>
+    <select id="getOragnizeByip" parameterType="java.lang.String" resultType="organize">
+        SELECT * FROM  organize_online WHERE id=(SELECT organize_id FROM organize_ip WHERE start=#{start} and end=#{end})
+    </select>
+
+    <select id="getOrganizesList"  resultType="organize">
+        SELECT * FROM  organize_online
+    </select>
+
+</mapper>

@@ -1,0 +1,115 @@
+.knowledge{padding-top:30px;}
+.knowledge  .sku-half{width:240px;}
+.knowledge  .sku-half span,.knowledge  .sku-full span{width:75px;}
+.knowledge  .sku-half b{width:144px;}
+
+.knowledge .hover .picture h2{display:none;}
+.knowledge .hover .hover-bg{display:block;}
+.sku-position .hover-bg{background:url(../../../images/kn-info-pannel-bg.png) no-repeat;height:39px;width:165px; position:absolute;top:0;left:0;z-index:100;text-align:center;padding-top:65px; color:#fff; display:none; cursor:pointer;}
+.sku-position .picture{width:165px;height:104px; position:relative;}
+.sku-position  .picture h2{height:25px; line-height:25px;background:url(../../../images/layer-bg.png) repeat;width:100%; text-align:center;color:#fff; position:absolute;bottom:0;left:0;}
+
+
+
+.kn-tp{}
+.kn-title{height:40px;background:#f7f8f8; line-height:40px;padding-left:15px;margin:10px auto;width:687px;}
+.kn-title .name{border-left:5px solid #1e75e6;font-size:18px; color:#384244;padding-left:5px;}
+.kn-title .kn-tp-error{background:url(../../../images/knowledge-title-icon.png) no-repeat 15px -143px; padding-left:30px; cursor:pointer; color:#9a9a9a;font-size:12px;}
+.kn-tp-main{width:695px;height:426px;border:1px solid #eaeaea;margin:0 auto;}
+.kn-open{width:40px;height:40px;background:url(../../../images/kn-open.jpg) no-repeat; float:right; cursor:pointer;}
+.kn-open-dft{width:40px;height:40px;background:url(../../../images/kn-open-dft.jpg) no-repeat; float:right; cursor:pointer;}
+
+.kn-scff{}
+.kn-scff .kn-title{margin:30px auto 0 auto;}
+.kn-scff-main{width:702px;margin:0 auto;}
+.kn-scff-main p{color:#737373;font-size:14px; line-height:26px;padding-top:20px;}
+.kn-from{height:40px; line-height:40px; position:relative;width:100%;border-bottom:1px solid #eaeaea;}
+.kn-from .line{width:64px;height:1px; background:#c7c7c7; position:absolute;left:0;top:20px;}
+.kn-from .kn-from-name{font-size:14px;color:#737373; padding-left:74px;}
+.kn-from .kn-from-name a{color:#faa91e;}
+.kn-from .kn-from-more{height:40px;border-bottom:2px solid #1e75e6;color:#1e75e6;position:absolute;bottom:-1px;right:0;width:80px;display:block;}
+.kn-rgt{width:247px;}
+.kn-rgt .zskz{}
+
+.kn-rgt  .zskz ul li a{display:block; width: 213px; height:32px; padding:0 17px; line-height:32px; font-size:14px;}
+.kn-rgt  .zskz ul li a:hover{ background-color:#f6f9fb;}
+.kn-rgt .zs_line_left{ color:#7e7e7e; float:left;}
+.kn-rgt  .zs_line_right{ color:#cdcdcd; float:right;}
+
+
+
+.link-menu{padding:10px 17px;width:213px;background:#fff;}
+.link-menu a{background:url(../../../images/kn-link-menu.jpg) no-repeat center bottom;height:36px; line-height:36px; display:block;margin-bottom:10px; color:#6e6e6e;}
+.link-menu a:hover{background:url(../../../images/kn-link-menu-dft.jpg) no-repeat center bottom;color:#1e75e6;}
+
+
+/*弹出层*/
+.layer-main-pic{position:relative;width:668px;height:450px;background:#fff;padding:20px 35px;}
+.layer-main-pic img{width:663px;height:378px;border:1px solid #cecece;}
+/*纠错*/
+.layer-jc{position:relative;width:668px;height:400px;background:#fff;padding:20px 35px 0 35px;}
+.jc-text-area textarea{width: 653px;height: 310px;border: 1px solid #cecece;padding:5px;}
+
+/*知识扩展页面*/
+.knowledge-kz{background:#fff; box-shadow:0 3px 4px rgba(100,100,100,.6); -moz-box-shadow:0 3px 4px rgba(100,100,100,.6);-webkit-box-shadow:0 3px 4px rgba(100,100,100,.6);margin-top:30px;}
+
+.kn-kz-main{overflow:hidden;width:100%;}
+.kn-kz-menu{float:left;width:190px;overflow:hidden;padding:0 20px;padding-bottom:30px;border-right:1px solid #dedede;}
+.kn-kz-menu dl{padding-top:10px;width:100%;}
+.kn-kz-menu dl dt{line-height:28px;height:28px;/*background:url(../../../images/kn-kz-menu-icon.png) no-repeat left 0;*//*padding-left:20px;*/font-size:16px;}
+.kn-kz-menu dl.cur dt{background-position:left -28px;color:#1e75e6;}
+.kn-kz-menu dl.cur dt a{color:#1e75e6;}
+.kn-kz-menu dl.cur dd{display:block;}
+
+.kn-kz-menu dl dd{padding:5px 0 5px 20px;color:#929292;display:none;}
+
+.kn-kz-list{padding:22px;width:724px;float:left;}
+.kn-kz-list dl{width:100%;}
+.kn-kz-list dt{width:100%;height:40px; line-height:40px;position:relative;background:#f7f8f8;}
+.kn-kz-list dd{padding:15px 0 40px 0;overflow:hidden;}
+.kn-kz-list dt span{margin-left:15px;border-left:5px solid #1c76e4;color:#383838;font-size:18px;padding-left:5px;}
+.kn-kz-list .kn-kz-summary,.kn-kz-list .kn-kz-content{color:#737373;font-size:14px;line-height:24px;padding: 5px 30px;text-indent: 28px;line-height: 30px;}
+.kn-kz-list .kn-kz-summary p{color:#737373;font-size:14px;line-height:24px;}
+.kn-kz-list .kn-kz-content p{color:#737373;font-size:14px;line-height:24px; padding: 5px 30px;text-indent: 28px;line-height: 30px;}
+.kn-kz-up{background:url(../../../images/kn-kz-up-down.png) no-repeat 68px 0 #f19f16;width:78px;height:35px;color:#fff;border:1px solid #f19f16;padding-left:30px;line-height:35px; float:right; cursor:pointer;}
+.kn-kz-down{background:url(../../../images/kn-kz-up-down.png) no-repeat 68px -35px #fff;width:78px;height:33px;color:#f19f16;border:1px solid #e8e8e8; padding-left:30px;line-height:35px; float:right; cursor:pointer;}
+
+.kn-kz-list .public_page{padding-top:0;}
+.kn-kz-menu dl.cur dd.cur a {color:#1e75e6;}
+/*知识图谱页面*/
+.kn-tupu{overflow:hidden;background:#fff;margin-top:30px;}
+.kn-tupu .module-title-name{background:url(../../../images/module-tltle-bg.gif) left bottom repeat-x;width:110px;overflow:hidden;}
+.kn-tupu .module-title-name i{background:url(../../../images/use-tip-icon2.png) no-repeat left center;float:left;width:23px;height:21px;margin-top:20px;padding-right:5px;}
+.my-clt-search{float:right;width:280px;height:28px;margin-top:10px;}
+.my-clt-search input{width:204px;border:1px solid #cecece!important;height:26px; line-height:26px;float:left;padding-left:24px; background:url(../../../images/search-icon.png) no-repeat 5px center;}
+.my-clt-search button{border:0; background:#1e75e6;width:45px;height:28px; float:right; cursor:pointer; color:#fff;font-size:14px;}
+
+.kn-tupu .kn-tupu-con{padding:20px;}
+.kn-tupu .kn-tupu-con img{width:100%;}
+.nameList{
+     font-style: italic;
+     margin-right: 10px
+ }
+.nameList1{
+    color: #72a97a;
+    font-style: italic;
+    margin-right: 10px
+}
+.sku-half b{float:left;width:235px;color:#9b9b9b;height:45px;font-weight:normal; line-height:15px;padding-top:15px;}
+
+.demo{
+    text-align:justify;
+    text-align-last:justify;
+    line-height:0;
+    height:44px;
+}
+
+
+
+
+
+
+
+
+
+

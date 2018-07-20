@@ -1,0 +1,7 @@
+.pre_next{ text-align:center; line-height:40px; padding:20px 0 40px; clear:both; font-size:12px; }
+.pre_next a{ padding:7px 10px; color:#3d3d3d; font-size:12px; background:#fff; border:1px solid #dcdcdc; margin:0 -1px}
+.pre_next a:hover, .pre_next a.cur{ background:#ca0000; border:1px solid #ca0000; color:#fff }
+.pre_next span{ padding:0 2px; color:#bbbbbb; }
+.pre_txt{ width:40px; height:30px; border:1px solid #dcdcdc; line-height:30px; text-align:center; margin:0 2px; vertical-align:middle; }
+.pre_sub{ width:48px; height:32px;border:1px solid #ca0000; color:#fff; background:#ca0000; line-height:20px; text-align:center; margin:0 2px;cursor:pointer; vertical-align:middle}
+.graph02{ display:none; }

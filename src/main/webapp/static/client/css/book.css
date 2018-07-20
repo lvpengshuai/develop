@@ -1,0 +1,24 @@
+@charset "utf-8";
+
+.star {
+	background: url(../img/book_star.png) no-repeat left center;
+	width: 13px;
+	height: 13px;
+	display: inline-block;
+}
+.star_half {
+	background:url(../img/book_star_half.png) no-repeat left center;
+	width: 13px;
+	height: 13px;
+	display: inline-block;
+}
+.star_empty {
+	background:url(../img/book_star_empty.png) no-repeat left center;
+	width: 13px;
+	height: 13px;
+	display: inline-block;
+}
+
+.pro_conment dl dd i {
+	float:left;
+}

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trs.mapper.AccessLogMapper">
+
+    <!-- 查询列设定 -->
+    <sql id="Base_Column_List">
+        id, `name`,`type`,resource_id,username,inet_ntoa(ip) as ip,url,gmt_create
+    </sql>
+    <sql id="sql_where">
+        <where>
+            <if test="type != null and type != ''">
+                AND type = #{type}
+            </if>
+            <if test="begin != null and begin != '' and end != null and end != ''">
+                AND gmt_create BETWEEN #{begin} AND #{end}
+            </if>
+
+            <if test="ipStart != null and ipStart != '' and ipEnd != null and ipEnd != ''">
+                AND ip BETWEEN #{ipStart} AND #{ipEnd}
+            </if>
+            <if test="ipStarts != null and ipStarts != '' and ipEnds != null and ipEnds != ''">
+                OR ip BETWEEN #{ipStarts} AND #{ipEnds}
+            </if>
+        </where>
+    </sql>
+
+    <!--查询访问记录数据-->
+    <select id="pageList" parameterType="map" resultType="int">
+        SELECT count(*) FROM access_log
+        <include refid="sql_where"/>
+
+    </select>
+
+    <!-- 添加访问记录 -->
+    <insert id="insert" parameterType="map">
+        INSERT INTO
+        access_log(id, `name`,`type`,resource_id,username,ip,url,gmt_create)
+        VALUES(DEFAULT, #{name},#{type},#{resource_id}, #{username}, #{ip}, #{url},#{gmt_create})
+    </insert>
+
+    <!--获取下载记录的数据-->
+    <select id="getDownloadData" parameterType="map" resultType="int">
+        SELECT count(*) FROM download_log
+        <include refid="sql_where"/>
+
+    </select>
+
+    <!-- 添加下载记录数据  -->
+    <insert id="addDownloadData" parameterType="map">
+        INSERT INTO
+        download_log(id, `name`,`type`,resource_id,username,ip,url,gmt_create)
+        VALUES(DEFAULT, #{name},#{type},#{resource_id}, #{username}, #{ip}, #{url},#{gmt_create})
+    </insert>
+
+    <select id="selectAccessByPage" parameterType="map" resultType="map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM access_log
+        <where>
+            <if test="begin != null and begin != '' and end != null and end != ''">
+                 AND gmt_create BETWEEN #{begin} AND #{end}
+            </if>
+             <if test="ipStart != null and ipStart != '' and ipEnd != null and ipEnd != ''">
+                 AND ip BETWEEN #{ipStart} AND #{ipEnd}
+            </if>
+        </where>
+        ORDER BY gmt_create DESC limit #{currPage},#{pageSize}
+    </select>
+    <select id="getAccessByPageTotal" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM access_log
+        <where>
+            <if test="begin != null and begin != '' and end != null and end != ''">
+                AND gmt_create BETWEEN #{begin} AND #{end}
+            </if>
+            <if test="ipStart != null and ipStart != '' and ipEnd != null and ipEnd != ''">
+                AND ip BETWEEN #{ipStart} AND #{ipEnd}
+            </if>
+        </where>
+    </select>
+
+    <!--下载记录-->
+    <select id="selectDownloadByPage" parameterType="map" resultType="map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM download_log
+        <where>
+            <if test="begin != null and begin != '' and end != null and end != ''">
+                AND gmt_create BETWEEN #{begin} AND #{end}
+            </if>
+            <if test="ipStart != null and ipStart != '' and ipEnd != null and ipEnd != ''">
+                AND ip BETWEEN #{ipStart} AND #{ipEnd}
+            </if>
+        </where>
+        ORDER BY gmt_create DESC limit #{currPage},#{pageSize}
+    </select>
+    <select id="getDownloadByPageTotal" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM download_log
+        <where>
+            <if test="begin != null and begin != '' and end != null and end != ''">
+                AND gmt_create BETWEEN #{begin} AND #{end}
+            </if>
+            <if test="ipStart != null and ipStart != '' and ipEnd != null and ipEnd != ''">
+                AND ip BETWEEN #{ipStart} AND #{ipEnd}
+            </if>
+        </where>
+    </select>
+
+    <!--热门资源访问数据 -->
+    <select id="getHotResource" parameterType="map" resultType="map">
+        SELECT name,COUNT(`name`) AS `count`, max(resource_id) as resource_id
+        from access_log
+        WHERE `type` = #{type}
+        <if test="ipStart != null and ipStart != '' and ipEnd != null and ipEnd != ''">
+            AND ip BETWEEN #{ipStart} AND #{ipEnd}
+        </if>
+        GROUP BY `name` ORDER BY COUNT(`name`) DESC LIMIT #{currPage},#{pageSize}
+    </select>
+    <select id="getHotResourceTotal" parameterType="map" resultType="int">
+
+        select count(*) from(
+          SELECT count(name) FROM access_log
+          WHERE `type` = #{type}
+        <if test="ipStart != null and ipStart != '' and ipEnd != null and ipEnd != ''">
+            AND ip BETWEEN #{ipStart} AND #{ipEnd}
+        </if>
+          GROUP BY `name`) a ;
+
+    </select>
+
+    <!--下载资源数据 -->
+    <select id="getDownladResource" parameterType="map" resultType="map">
+
+        SELECT name,COUNT(`name`) AS `count`, max(resource_id) as resource_id from download_log
+        WHERE `type` = #{type}
+        <if test="ipStart != null and ipStart != '' and ipEnd != null and ipEnd != ''">
+            AND ip BETWEEN #{ipStart} AND #{ipEnd}
+        </if>
+        GROUP BY `name` ORDER BY COUNT(`name`) DESC LIMIT #{currPage},#{pageSize}
+
+    </select>
+    <select id="getDownladResourceTotal" parameterType="map" resultType="int">
+        select count(*) from(
+          SELECT count(name) FROM download_log
+          WHERE `type` = #{type}
+        <if test="ipStart != null and ipStart != '' and ipEnd != null and ipEnd != ''">
+            AND ip BETWEEN #{ipStart} AND #{ipEnd}
+        </if>
+        GROUP BY `name`) a ;
+
+    </select>
+
+    <!--用户记录-->
+    <select id="getUserlog" parameterType="map" resultType="map">
+      select a.searchname as word,inet_ntoa(a.ip) as ip,a.createtime as time,b.`name` as resource,b.resource_id as resource_id
+        from search_history a LEFT JOIN download_log b
+
+        on a.ip = b.ip
+        <if test="ipStart != null and ipStart != '' and ipEnd != null and ipEnd != ''">
+          WHERE a.ip BETWEEN #{ipStart} AND #{ipEnd}
+        </if>
+        ORDER BY time desc
+
+        LIMIT #{currPage},#{pageSize}
+    </select>
+    <select id="getUserlogTotal" parameterType="map" resultType="int">
+      select COUNT(*)
+        from search_history a LEFT JOIN download_log b
+
+        on a.ip = b.ip
+        <if test="ipStart != null and ipStart != '' and ipEnd != null and ipEnd != ''">
+            WHERE a.ip BETWEEN #{ipStart} AND #{ipEnd}
+        </if>
+    </select>
+</mapper>

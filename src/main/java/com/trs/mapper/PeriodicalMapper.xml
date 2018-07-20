@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trs.mapper.PeriodicalMapper">
+    <!-- 定义sql查询片段 -->
+    <sql id="where_query">
+        <if test="search != null and search != ''">
+            and ch_name like '%${search}%'
+        </if>
+        <if test="state != null and state != ''">
+            and state = #{state}
+        </if>
+    </sql>
+
+    <!-- 数据列sql -->
+    <sql id="return_column">
+          id,
+          periodical_name, roll, years, month,
+          phase, lanmu, ch_name, en_name,pub_date,
+          ch_abstract, en_abstract, ch_keyword,
+          en_keyword, doi, ch_category_id,
+          docs_flag_code, article_id,
+          fund_program, fund_program_id,
+          state, gmt_create, pdf_wenjiandaxiao,
+          pdf_shifoubendi, pdf_lianjiedizhi,
+          pdf_xiazaicishu, pdf_wenJian,
+          pdf_url, quanwen, lururenyuan, lianxizuozhe,cankao_wenxian,new_ch_abstract,en_author_name,en_author_company,
+          no_tags_ch_name,no_tags_ch_keyword,en_fund_program,no_tags_en_name,gmt_contribute,author_abstract,
+          author_email,author_name,zuozhedanwei,en_author_company,tongxunzuozhe_abstract
+    </sql>
+    <!-- 自定义map -->
+    <resultMap id="map" type="periodical">
+        <result column="id" property="id"/>
+        <result column="periodical_name" property="periodicalName"/>
+        <result column="ch_name" property="chName"/>
+        <result column="en_name" property="enName"/>
+        <result column="new_ch_abstract" property="newChAbstract"/>
+        <result column="ch_abstract" property="chAbstract"/>
+        <result column="en_abstract" property="enAbstract"/>
+        <result column="ch_keyword" property="chKeyword"/>
+        <result column="en_keyword" property="enKeyword"/>
+        <result column="ch_category_id" property="chCategoryId"/>
+        <result column="docs_flag_code" property="docsFlagCode"/>
+        <result column="article_id" property="articleId"/>
+        <result column="fund_program" property="fundProgram"/>
+        <result column="fund_program_id" property="fundProgramId"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="pub_date" property="pubDate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="pdf_wenjiandaxiao" property="PDFWenJianDaXiao"/>
+        <result column="pdf_shifoubendi" property="PDFShiFouBenDi"/>
+        <result column="pdf_lianjiedizhi" property="PDFLianJieDiZhi"/>
+        <result column="pdf_wenJian" property="PDFWenJian"/>
+        <result column="pdf_url" property="PDFUrl"/>
+        <result column="pdf_xiazaicishu" property="PDF_XiaZaiCiShu"/>
+        <result column="lianxizuozhe" property="lianXiZuoZhe"/>
+        <result column="cankao_wenxian" property="canKaoWenXian"/>
+        <result column="wenxian_wenjian" property="wenXianWenJian"/>
+        <result column="zazhiid" property="zaZhiId"/>
+        <result column="nianjuanqiid" property="nianJuanQiId"/>
+        <result column="zuozhedanwei" property="zuoZheDanWei"/>
+    </resultMap>
+
+    <!-- &lt;!&ndash; 定义paramterMap &ndash;&gt;
+     <parameterMap id="dao" type="com.trs.model.Periodical">
+         <parameter property="pubDate" javaType="periodical"/>
+     </parameterMap>-->
+    <!-- 分页查看所有数据 -->
+    <select id="findAll" parameterType="map" resultMap="map">
+        SELECT * FROM periodical
+        <where>
+            <include refid="where_query"/>
+        </where>
+
+        <!--<if test="sort == null || sort == ''">
+          gmt_create
+        </if>-->
+        <if test="sort == 'pubDate'">
+            ORDER BY
+            pub_date
+            ${order}
+        </if>
+        <if test="sort == 'gmtCreate'">
+            ORDER BY
+            gmt_create
+            ${order}
+        </if>
+        ORDER by id DESC
+        limit #{currPage},#{pageSize}
+    </select>
+
+    <!-- 返回所有数据总数，用于分页 -->
+    <select id="total" resultType="int">
+        select count(*) from periodical
+        <where>
+            <include refid="where_query"/>
+        </where>
+    </select>
+
+    <!-- 通过id查询数据 -->
+    <select id="findDatasById" parameterType="int" resultMap="map">
+        select
+          <include refid="return_column"/>
+        from periodical where id = #{id}
+    </select>
+
+    <!-- 通过id删除数据 -->
+    <delete id="deleteDatasById" parameterType="int">
+        DELETE FROM periodical where id = #{id}
+    </delete>
+
+    <!-- 发布对应的资源 -->
+    <update id="change" parameterType="periodical">
+        UPDATE periodical set state = #{state} where id = #{id}
+    </update>
+
+    <!-- 导入资源 -->
+    <insert id="add" parameterType="periodical" useGeneratedKeys="true" keyProperty="id">
+        INSERT into periodical(
+          id,
+          periodical_name, roll, years, month,
+          phase, lanmu, ch_name, en_name,
+          ch_abstract, en_abstract, ch_keyword,
+          en_keyword, doi, ch_category_id,
+          docs_flag_code, article_id,
+          fund_program, fund_program_id,
+          state, gmt_create, pdf_wenjiandaxiao,
+          pdf_shifoubendi, pdf_lianjiedizhi,
+          pdf_xiazaicishu, pdf_wenJian,
+          pdf_url, quanwen, lururenyuan,
+          new_ch_abstract,
+          no_tags_ch_name,no_tags_ch_keyword,
+          no_tags_en_name,gmt_contribute,author_abstract,
+          author_email,author_name,gmt_modified,cankao_wenxian,zazhiid,
+          nianjuanqiid,pub_date,zuozhedanwei,lianxizuozhe,en_author_company,
+          tongxunzuozhe_abstract,start_page,end_page
+        )
+        VALUES
+        (
+          DEFAULT,
+          #{periodicalName},#{roll},#{years},#{month},
+          #{phase},#{lanmu},#{chName},#{enName},
+          #{chAbstract},#{enAbstract},#{chKeyword},
+          #{enKeyword},#{doi},#{chCategoryId},
+          #{docsFlagCode},#{articleId},
+          #{fundProgram},#{fundProgramId},
+          #{state},#{gmtCreate},#{PDFWenJianDaXiao},
+          #{PDFShiFouBenDi},#{PDFLianJieDiZhi},
+          #{PDF_XiaZaiCiShu},#{PDFWenJian},
+          #{PDFUrl},#{quanwen},#{lururenyuan},
+          #{newChAbstract},
+          #{noTagsChName},#{noTagsChKeyword},
+          #{noTagsEnName},#{gmtContribute},#{authorAbstract},
+          #{authorEmail},#{authorName},#{gmtModified},#{canKaoWenXian},#{zaZhiId},
+          #{nianJuanQiId},#{pubDate},#{zuoZheDanWei},#{lianXiZuoZhe},#{enAuthorCompany},
+          #{tongxunzuozheAbstract},#{startPage},#{endPage}
+        )
+    </insert>
+
+
+    <!-- 修改期刊 -->
+    <update id="updatePeriodical" parameterType="Periodical">
+        update periodical
+        <set>
+            <if test="chName != null">
+                ch_name = #{chName},
+            </if>
+            <if test="lianXiZuoZhe != null">
+                lianxizuozhe = #{lianXiZuoZhe},
+            </if>
+            <if test="pubDate != null">
+                pub_date = #{pubDate},
+            </if>
+            <if test="doi != null">
+                doi = #{doi},
+            </if>
+            <if test="chKeyword != null">
+                ch_keyword = #{chKeyword},
+            </if>
+            <if test="chAbstract != null">
+                ch_abstract = #{chAbstract},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="PDFUrl != null and PDFUrl != ''">
+                pdf_url = #{PDFUrl},
+            </if>
+            <if test="lururenyuan != null and lururenyuan != ''">
+                lururenyuan = #{lururenyuan},
+            </if>
+            <if test="newChAbstract != null and newChAbstract != ''">
+                new_ch_abstract = #{newChAbstract},
+            </if>
+            <if test="canKaoWenXian != null and canKaoWenXian != ''">
+                cankao_wenxian = #{canKaoWenXian}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 查询所有数据 -->
+    <select id="selectData" resultMap="map">
+        select
+        ch_abstract,pdf_wenJian,ch_name,id,lianxizuozhe,ch_keyword,cankao_wenxian
+        <!--<include refid="return_column"/>-->
+        from periodical;
+    </select>
+
+    <!-- 查询临时表数据 -->
+    <!--<select id="select" parameterType="periodical" resultMap="map">-->
+        <!--SELECT ch_name from periodical2 where nianjuanqiid = #{nianJuanQiId} and article_id = #{articleId};-->
+    <!--</select>-->
+
+    <!-- 通过文章编号与杂志id去重 -->
+    <select id="selectDataByZaZhiId" parameterType="map" resultMap="map">
+        SELECT id FROM periodical where article_id = #{articleId} and zazhiid = #{zaZhiId} limit 1
+    </select>
+
+</mapper>

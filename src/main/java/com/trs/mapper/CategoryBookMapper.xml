@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trs.mapper.CategoryBookMapper">
+
+    <resultMap id="baseCategoryMap" type="com.trs.model.CategoryBook">
+        <id column="num" property="num"/>
+        <result column="name" property="name"/>
+        <result column="parent" property="parent"/>
+    </resultMap>
+
+    <select id="findParentCategory" resultMap="baseCategoryMap">
+
+        SELECT * FROM category_book WHERE num =#{num}
+
+    </select>
+</mapper>

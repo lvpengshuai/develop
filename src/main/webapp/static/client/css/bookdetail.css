@@ -1,0 +1,104 @@
+@charset "utf-8";
+/* CSS Document */
+
+.package .tab-hd li{
+    float: left;
+}
+.package .tab-hd{
+    width: 294px;
+}
+
+/* 正文显示区域 */
+.f-in-line-img {
+    margin-bottom: -10px;
+    height: 37px;
+    width: auto;
+    margin-left: 5px;
+}
+
+.f-single-img {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 90%;
+    display: inherit;
+}
+
+/*文件夹选中改变颜色*/
+.selected {
+    font-weight: bold;
+    color: #ca0000;
+}
+.ftitle{
+    font-weight: 600;
+}
+
+.f-pic-table-title{
+    text-align: center;
+    color: #0f192a;
+    width: 100%;
+    font-weight: 600;
+    margin-top: 10px;
+    font-size: 16px;
+}
+.f-pic-table-show{
+    text-align: center;
+    color: #aaaaaa;
+    width: 100%;
+    font-weight: 600;
+    margin-top: 10px;
+    font-size: 15px;
+}
+.f-pic-figure-title{
+    text-align: center;
+    color: #0f192a;
+    width: 100%;
+    font-weight: 600;
+    margin-top: 10px;
+    font-size: 16px;
+}
+.f-pic-figure-show{
+    text-align: center;
+    color: #aaaaaa;
+    width: 100%;
+    font-weight: 600;
+    margin-top: 10px;
+    font-size: 15px;
+}
+.f-a-file-down{
+    padding-left: 80%;
+    padding-top: 18px;
+    font-size: 18px;
+}
+.f-nor-ct{
+    font-weight: 300;
+    padding-left: 10px;
+}
+.f-para-role-right{
+    padding-right: 60px;
+    text-align: right;
+}
+.f-para-role-center{
+    text-align: center;
+}
+.readboxinfo a{
+    /*border: solid #ca0000 1px;*/
+    color: #0458ce;
+    border-radius: 12px;
+    padding: 2px 9px;
+}
+.showword{
+    text-align: center;
+    margin-top: 25px;
+    font-size: 19px;
+}
+.showword a{
+    border:none;
+}
+.f-id-link{
+    font-style: italic;
+    text-decoration:underline;
+}
+.bd-a-h{
+    text-decoration:underline;
+}
+

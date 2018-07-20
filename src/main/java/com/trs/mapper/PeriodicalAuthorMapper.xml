@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trs.mapper.PeriodicalAuthorMapper">
+    <resultMap id="map" type="com.trs.model.PeriodicalAuthor">
+        <result column="id" property="id"/>
+        <result property="indexId" column="index_id"/>
+        <result column="author_name" property="authorName"/>
+    </resultMap>
+    <insert id="add" parameterType="com.trs.model.PeriodicalAuthor">
+        INSERT INTO periodical_author(id,index_id,author_name,company) VALUES (
+            DEFAULT,
+            #{indexId},
+            #{authorName},
+            #{company}
+        )
+    </insert>
+</mapper>

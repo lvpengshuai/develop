@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
+<head>
+  <link href="../Styles/main.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="http://121.199.58.173:8080/website/static/reader/libs//yd/selectionmenu.js"/>
+	<link type="text/css" rel="stylesheet" href="http://121.199.58.173:8080/website/static/reader/libs//yd/selectionmenu.css"/>
+  <title>扉页</title>
+  
+  <script type="text/javascript">
+  SelectionMenu.addEvent(window, 'load', function () {
+	
+	new SelectionMenu({
+		container : document.getElementById('contentDiv'),
+		id : 'selection-menu',
+		menuHTML : '<a id="selection-menu-google">Google-Suche</a><a id="selection-menu-bing">Bing-Suche</a>',
+		handler : function (e) {
+			var target = e.target || e.srcElement,
+				id = target.id,
+				selectedText = this.selectedText,
+				query = encodeURI(selectedText.replace(/\s/g, '+')),
+				searchURI;
+			
+			if (id == 'selection-menu-google') {
+				searchURI = 'http://www.google.de/search?ie=utf-8&q=';
+			} else if (id == 'selection-menu-bing') {
+				searchURI = 'http://www.bing.com/search?q=';
+			}
+			
+			location.href = searchURI + query;
+		}
+	});
+	
+});
+  
+  </script>
+</head>
+
+<body id="contentDiv">
+  <div class="tg-title">
+    战国终结者　秦始皇
+  </div>
+
+  <div class="tg-author">
+    他山之石　著
+  </div>
+
+  <div class="tg-pub">
+    中国工人出版社
+  </div>
+</body>
+</html>

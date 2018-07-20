@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.trs.mapper.NodeDataMapper">
+    <resultMap id="nodeData" type="com.trs.model.NodeData">
+        <id column="id" property="id"/>
+        <result column="fid" property="fid"/>
+        <result column="name" property="name"/>
+        <result column="state" property="state"/>
+    </resultMap>
+    <!--根据fid获取节点数据-->
+    <select id="getNodeDataList" parameterType="int" resultMap="nodeData">
+        SELECT * FROM node_data where fid=#{fid}
+    </select>
+    <select id="getAllNode" resultMap="nodeData">
+        SELECT  * from node_data
+    </select>
+    <insert id="addNodeData" parameterType="NodeData" useGeneratedKeys="true" keyProperty="id">
+    insert into node_data (fid, `name`,`state`,nodeurl) values (#{fid},#{name},#{state},#{nodeurl})
+    </insert>
+
+    <delete id="delNodeData" parameterType="int">
+        delete from node_data where id = #{id}
+    </delete>
+    <delete id="delNodeByid" parameterType="int">
+        delete from node_data where id = #{id}
+    </delete>
+    <update id="updateNode" parameterType="NodeData">
+        update node_data set name=#{name},nodeurl=#{nodeurl} where id=#{id}
+    </update>
+    <select id="getNodeById" parameterType="int" resultType="nodeData">
+        SELECT * FROM node_data where id=#{id}
+    </select>
+    <select id="getSwf" resultType="nodeUrl">
+        SELECT * FROM node_url nu WHERE nu.id=#{id}
+    </select>
+    <select id="getDataSearch" resultType="com.trs.model.NodeUrl">
+        <bind name="name" value="'%'+search+'%'"/>
+        SELECT * FROM node_url WHERE `name` LIKE #{name} ORDER BY node_time DESC LIMIT 10
+    </select>
+
+</mapper>

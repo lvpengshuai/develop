@@ -1,0 +1,109 @@
+.tree-container {
+    min-width: 200px;
+    max-width: 300px;
+    max-height: 700px;
+    overflow: auto;
+    margin: 0px 15px;
+}
+.tree-container-wrap{
+    height: 700px;
+    position: absolute;
+    z-index: 999;
+    margin: 0px 15px;
+}
+.total-word{
+    margin-top: 20px;
+    margin-left: 15px;
+}
+
+.search-tree-input {
+    width: 178px;
+    border: 1px solid #cecece !important;
+    height: 26px;
+    line-height: 26px;
+    padding-left: 14px;
+    margin: 10px 5px;
+}
+input{
+
+}
+.main-info{
+  float: left;
+    width: 60%;
+    margin-left: 337px;
+}
+.main-info div{
+
+}
+.thesaurus-info {
+    float: left;
+    height: inherit;
+
+
+}
+
+.thesaurus-history{
+    position:absolute;
+    top:177px;
+    z-index:1111;
+    width:600px;
+}
+
+.spanLabel{
+    width: 80px;
+}
+
+
+.thesaurus-history ui{
+     width: inherit;
+     margin:20px;
+ }
+.thesaurus-history ui li{
+    width: inherit;
+    margin:20px;
+}
+.id ,.mainWord{
+    display: none;
+}
+
+.word-type {
+    display: none;
+}
+#main{
+    padding-left: 90px;
+     padding-top: 50px;
+    margin: 0px;
+ }
+
+.rename{
+}
+.show-head span{
+    margin-right: 10px;
+    float: left;
+}
+
+#core-words-nodes-scroll{
+    min-width: 300px;
+    max-height: 300px;
+    overflow: auto;
+}
+#child-nodes input,.parent input,#core-words-nodes input,#core-words-nodes-scroll input{
+ }
+.tab-menu{
+    padding-top: 20px;
+    float: right;
+    padding-right:690px;
+    color: #45bb45;
+}
+button{
+    background-color: #0000c0;
+}
+
+.core-words{
+}
+
+.on{
+    display:inherit;
+}
+
+li {list-style-type:none;}

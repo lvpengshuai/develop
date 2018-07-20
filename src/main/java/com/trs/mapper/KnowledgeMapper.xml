@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trs.mapper.KnowledgeMapper">
+    <resultMap id="BaseResultMap" type="com.trs.model.Knowledge">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="knowledge_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="english_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="parent_class" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="last_syn_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        </constructor>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.trs.model.Knowledge">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="knowledge_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="english_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="parent_class" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="last_syn_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="property" jdbcType="LONGVARCHAR" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+    <resultMap id="baseKnowledgeMap" type="com.trs.model.Knowledge">
+        <id column="id" property="id"/>
+        <result column="knowledge_name" property="knowledgeName"/>
+        <result column="english_name" property="englishName"/>
+        <result column="parent_class" property="parentClass"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_syn_time" property="lastSynTime"/>
+        <result column="status" property="status"/>
+        <result column="property" property="property"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, knowledge_name, english_name, parent_class, create_time, last_syn_time, status
+  </sql>
+    <sql id="Blob_Column_List">
+    property
+  </sql>
+
+    <sql id="sql_where">
+        <where>
+            <if test="search != null and search !=''">
+                knowledge_name LIKE "%"#{search}"%"
+            </if>
+            <if test="status != ''and status !=null">
+                AND status =#{status}
+            </if>
+        </where>
+    </sql>
+
+    <!--查询所有知识元-->
+    <select id="findAll" parameterType="map" resultMap="baseKnowledgeMap">
+        SELECT * from knowledge
+
+        <include refid="sql_where"/>
+
+        <if test="sort == null or sort == ''">
+            ORDER BY create_time DESC
+        </if>
+        <if test="sort == 'syn_time'">
+            ORDER BY last_syn_time ${order}
+        </if>
+
+        limit #{currPage},#{pageSize}
+    </select>
+
+    <!--获取知识元总记录数-->
+    <select id="total" resultType="int" parameterType="map">
+        SELECT count(*) from knowledge
+
+        <include refid="sql_where"/>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from knowledge
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectByKnowledgeName" parameterType="String" resultMap="baseKnowledgeMap">
+    select * from knowledge where knowledge.knowledge_name = #{name} and status = 1
+  </select>
+
+    <select id="findByName" parameterType="String" resultMap="baseKnowledgeMap">
+        select * from knowledge where knowledge.knowledge_name = #{name}
+    </select>
+
+    <select id="selectAboutWords" parameterType="String" resultType="String">
+        select knowledge_name from knowledge where knowledge.parent_class = #{name}
+    </select>
+    <select id="selectAllWords" resultType="String">
+        select knowledge_name from knowledge
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from knowledge
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteAll">
+        delete from knowledge
+    </delete>
+    <delete id="deleteByName" parameterType="java.lang.String">
+    delete from knowledge
+    where knowledge_name = #{knowledgeName,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.trs.model.Knowledge">
+    insert into knowledge (id, knowledge_name, english_name,
+      parent_class, create_time, last_syn_time, 
+      status, property)
+    values (DEFAULT, #{knowledgeName,jdbcType=VARCHAR}, #{englishName,jdbcType=VARCHAR},
+      #{parentClass,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{lastSynTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{property,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" keyProperty="id" parameterType="com.trs.model.Knowledge">
+        insert into knowledge
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="knowledgeName != null">
+                knowledge_name,
+            </if>
+            <if test="englishName != null">
+                english_name,
+            </if>
+            <if test="parentClass != null">
+                parent_class,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="lastSynTime != null">
+                last_syn_time,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="property != null">
+                property,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="knowledgeName != null">
+                #{knowledgeName,jdbcType=VARCHAR},
+            </if>
+            <if test="englishName != null">
+                #{englishName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentClass != null">
+                #{parentClass,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastSynTime != null">
+                #{lastSynTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="property != null">
+                #{property,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.trs.model.Knowledge">
+        update knowledge
+        <set>
+            <if test="knowledgeName != null">
+                knowledge_name = #{knowledgeName,jdbcType=VARCHAR},
+            </if>
+            <if test="englishName != null">
+                english_name = #{englishName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentClass != null">
+                parent_class = #{parentClass,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastSynTime != null">
+                last_syn_time = #{lastSynTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="property != null">
+                property = #{property,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.trs.model.Knowledge">
+    update knowledge
+    set knowledge_name = #{knowledgeName,jdbcType=VARCHAR},
+      english_name = #{englishName,jdbcType=VARCHAR},
+      parent_class = #{parentClass,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_syn_time = #{lastSynTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      property = #{property,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateByPrimaryKey" keyProperty="id" parameterType="com.trs.model.Knowledge">
+    update knowledge
+    set knowledge_name = #{knowledgeName,jdbcType=VARCHAR},
+      english_name = #{englishName,jdbcType=VARCHAR},
+      parent_class = #{parentClass,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_syn_time = #{lastSynTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!-- 查询所有数据 -->
+    <select id="selectData" resultMap="baseKnowledgeMap">
+        select knowledge_name, id from knowledge
+    </select>
+</mapper>

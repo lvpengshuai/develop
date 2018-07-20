@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trs.mapper.AuthorResourceMapper">
+    <insert id="insert" parameterType="com.trs.model.AuthorResource">
+        insert into author_resource(id,resource_id,author_id,type) values(
+          DEFAULT,
+          #{resourceId},
+          #{authorId},
+          #{type}
+        )
+    </insert>
+
+    <delete id="deleteByResourceAndType" parameterType="map">
+      DELETE FROM author_resource WHERE type =#{type} AND resource_id =#{resourceId}
+    </delete>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.trs.mapper.NodeUrlMapper">
+    <resultMap id="url" type="com.trs.model.NodeUrl">
+        <id column="id" property="id"/>
+        <result column="node_url" property="node_Url"/>
+        <result column="node_id" property="node_Id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+    <delete id="delNodeUrl">
+        DELETE FROM node_url WHERE node_id=#{id}
+    </delete>
+    <delete id="delNodeUrlById">
+        DELETE FROM node_url WHERE id=#{id}
+    </delete>
+    <!--根据pid获取节点数据-->
+
+    <select id="getListByNodeId" parameterType="int" resultMap="url">
+        SELECT * FROM node_url where node_id=#{nodeId}
+    </select>
+    <!--增加节点路径-->
+    <insert id="addNodeUrl" parameterType="NodeUrl">
+        insert into node_url (`id`,node_url, node_id,`name`,tid,excel_url)
+        values (
+        #{id},
+        #{node_Url},
+        #{node_Id},
+        #{name},
+        #{tid},
+        #{excel_url}
+        )
+    </insert>
+   <select id="getAllNode" resultMap="url">
+        SELECT  * from node_url
+   </select>
+    <select id="getNodeUrl" resultType="com.trs.model.NodeUrl">
+        SELECT  * from node_url WHERE id=#{id}
+    </select>
+</mapper>

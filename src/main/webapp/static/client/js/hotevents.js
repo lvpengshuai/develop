@@ -1,0 +1,3 @@
+function gethotevent(page,year) {
+    $
+}

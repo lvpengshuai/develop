@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trs.mapper.BookFileMapper">
+
+    <select id="getBookFileByCodeAndTitle18" resultType="com.trs.model.BookFile">
+SELECT
+	*
+FROM
+	book_file bf
+WHERE
+	bf.bookcode = #{bookCode}
+AND bf.title != ""
+AND bf.title != "续表"
+AND bf.filetype= "image"
+<if test="likeString!=null">
+    AND bf.title LIKE #{likeString}
+</if>
+ORDER BY
+	bf.id
+LIMIT #{start},
+ #{end}
+    </select>
+    <select id="getBookFileNum" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        book_file bf
+        WHERE
+        bf.bookcode = #{bookCode}
+        AND bf.title!=""
+        AND bf.title!="续表"
+        AND bf.filetype= "image"
+        <if test="likeString!=null">
+        AND bf.title LIKE #{likeString}
+        </if>
+    </select>
+</mapper>

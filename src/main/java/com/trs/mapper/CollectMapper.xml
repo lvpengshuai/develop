@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trs.mapper.CollectMapper">
+    <!-- 返回值设定 -->
+    <resultMap id="coResultMap" type="com.trs.model.Collect" >
+        <id column="id" property="id"  />
+        <result column="tid" property="tid" />
+        <result column="title" property="title" />
+        <result column="subtitle" property="subtitle" />
+        <result column="source" property="source" />
+        <result column="abs" property="abs" />
+        <result column="username" property="username"  />
+        <result column="foldername" property="foldername"  />
+        <result column="gmt_greate" property="gmtCreate" />
+        <result column="bookcode" property="bookcode"/>
+    </resultMap>
+    <select id="collectShowWeek" resultType="com.trs.model.Collect" parameterType="String">
+        SELECT
+        *
+        FROM
+        my_collect mc
+        WHERE
+        mc.username =  #{userName}
+        AND mc.gmt_greate &gt;= SUBDATE(
+        CURDATE(),
+        DATE_FORMAT(CURDATE(), '%w') - 1
+        )
+        AND mc.gmt_greate &lt;= SUBDATE(
+        CURDATE(),
+        DATE_FORMAT(CURDATE(), '%w') - 7
+        )
+    </select>
+
+    <!-- 根据用户名查询 我得收藏 -->
+    <select id="collectShow"  resultMap="coResultMap" parameterType="map">
+        SELECT *
+        from my_collect
+        <where>
+            <if test="foldername != null and foldername !=''">
+                foldername = #{foldername} AND
+            </if>
+            username = #{userName}
+        </where>
+        AND tid IS  NOT NULL
+        ORDER BY id
+        limit #{pageSize},#{currPage}
+    </select>
+
+    <!-- 删除我得收藏 -->
+    <delete id="collectDelete" parameterType="java.lang.Integer">
+        delete from my_collect
+        where id = #{id}
+    </delete>
+
+    <!-- 查询收藏夹 -->
+    <select id="collectFolder"  resultMap="coResultMap">
+        SELECT DISTINCT foldername FROM my_collect WHERE username=#{userName}
+    </select>
+
+    <!-- 删除文件夹 -->
+    <delete id="collectFolderDelete" parameterType="map">
+        delete from my_collect
+        where foldername = #{folderName} AND  username=#{username}
+    </delete>
+
+    <!--更新文件夹名字-->
+    <update id="collectFolderReName" parameterType="map">
+        UPDATE my_collect SET foldername=#{folderName}  where foldername =#{oldFolderName} AND username=#{username}
+    </update>
+
+    <!--添加收藏夹-->
+    <insert id="insertFolder" parameterType="com.trs.model.Collect">
+        insert into my_collect (foldername,username,gmt_greate)
+        values (#{foldername},#{username},#{gmtCreate})
+    </insert>
+
+    <!-- 查询收藏夹 根据文件夹名字 -->
+    <select id="selectFolderName"  resultMap="coResultMap">
+        SELECT * FROM  my_collect WHERE  foldername=#{folderName} AND username=#{username}
+    </select>
+
+
+    <!--添加收藏-->
+    <insert id="addCollect" parameterType="com.trs.model.Collect">
+        insert into my_collect (foldername,username,gmt_greate,tid,title,subtitle,source,abs,bookcode)
+        values (#{foldername},#{username},#{gmtCreate},#{tid},#{title},#{subtitle},#{source},#{abs},#{bookcode})
+    </insert>
+
+    <!-- 根据tid，用户名查询收藏 -->
+    <select id="selectByUserNameAndTID"  resultMap="coResultMap">
+        SELECT * FROM  my_collect WHERE  username=#{userName} AND tid=#{tid}
+    </select>
+
+
+    <!-- 查询收藏个数 -->
+    <select id="collectShowCount" resultType="Integer">
+        SELECT count(*)
+        from my_collect
+        <where>
+            <if test="foldername != null and foldername !=''">
+                foldername = #{foldername} AND
+            </if>
+            username = #{userName}
+            AND foldername IS  NOT NULL
+            AND tid IS  NOT NULL
+        </where>
+    </select>
+    <select id="collectSpliceWeek" resultType="com.trs.model.Splice">
+              SELECT
+        *
+        FROM
+        my_splice ms
+        WHERE
+        ms.username =  #{userName}
+        AND ms.gmt_create &gt;= SUBDATE(
+        CURDATE(),
+        DATE_FORMAT(CURDATE(), '%w') - 1
+        )
+        AND ms.gmt_create &lt;= SUBDATE(
+        CURDATE(),
+        DATE_FORMAT(CURDATE(), '%w') - 7
+        )
+    </select>
+</mapper>

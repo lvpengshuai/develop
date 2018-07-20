@@ -1,0 +1,40 @@
+/*.organleft{*/
+    /*width: 800px;*/
+    /*height:500px;*/
+    /*float: left*/
+/*}*/
+.statisright{
+    width: 156px;
+    height: 500px;
+    border-right: none;
+    float: left;
+}
+.statisname{
+    padding-left: 18px;
+    float: right;
+    background-color: #CC0004;
+    height: 28px;
+    width: 156px;
+    color: #fff;
+}
+.statisright1{
+    width: 100px;
+    height: 500px;
+    border-left: none;
+    float: left;
+}
+.statisfrequency{
+    padding-right: 18px;
+    float: right;
+    background-color: #CC0004;
+    height: 28px;
+    width: 100px;
+    color: #fff;
+}
+.subkey{
+    float: right;
+    width:100px;/*要显示文字的宽度*/
+    overflow:hidden; /*超出的部分隐藏起来。*/
+    white-space:nowrap;/*不显示的地方用省略号...代替*/
+    text-overflow:ellipsis;/* 支持 IE */
+}

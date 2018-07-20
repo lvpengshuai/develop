@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trs.mapper.MyCollectMapper">
+    <!-- 返回值设定 -->
+    <resultMap id="BaseResultMap" type="com.trs.model.MyCollect" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="DATE"/>
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="name_id" property="nameId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 查询列设定 -->
+    <sql id="Base_Column_List" >
+
+        id, username,name,type,gmt_create,name_id
+    </sql>
+    <select id="pageList" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+          <include refid="Base_Column_List"/>
+        FROM
+        my_collect
+        <where>
+            <if test="type != null and type != '' and type != 0">
+                AND  type = #{type}
+            </if>
+            <if test="keyWord != null and keyWord != ''">
+                AND  name like '%${keyWord}%'
+            </if>
+            and username = #{userName}
+        </where>
+        order by id DESC
+        limit #{currPage},#{pageSize}
+    </select>
+
+    <!-- 数据总数 -->
+    <select id="total" parameterType="map" resultType="int">
+        SELECT COUNT(*) from my_collect
+        <where>
+            <if test="type != null and type != '' and type != 0">
+                and type = #{type}
+            </if>
+            <if test="keyWord != null and keyWord != ''">
+                AND  name like '%${keyWord}%'
+            </if>
+            and username = #{userName}
+        </where>
+    </select>
+
+    <!-- 收藏 -->
+    <insert id="insert" parameterType="map">
+        INSERT INTO
+        my_collect(id,name,type,gmt_create,name_id,username)
+        VALUES(DEFAULT, #{name},#{type}, #{time}, #{nameId}, #{userName})
+    </insert>
+
+    <!-- 检查收藏 -->
+    <select id="findCollectByUserNameAndTypeAndNameId" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        from my_collect
+        where username = #{userName} and type = #{type} and name_id = #{nameId}
+    </select>
+
+    <!-- 取消收藏 -->
+    <delete id="detelete" parameterType="map">
+        DELETE FROM my_collect where username = #{userName} and name_id = #{nameId} and type = #{type}
+    </delete>
+</mapper>
